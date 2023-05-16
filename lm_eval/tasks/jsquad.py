@@ -12,7 +12,6 @@ from math import exp
 from lm_eval.base import rf, Task
 from functools import partial
 
-
 _CITATION = """
 @inproceedings{kurihara-etal-2022-jglue,
     title = "{JGLUE}: {J}apanese General Language Understanding Evaluation",
@@ -52,6 +51,7 @@ class JSQuAD(Task):
     PROMPT_VERSION = 0.1
     DATASET_PATH = "shunk031/JGLUE"
     DATASET_NAME = "JSQuAD"
+    LOAD_TOKENIZER = True
     DESCRIPTION = "[題名]と[問題]から[質問]に対する[答え]を抜き出しなさい\n\n"
     SEP = "\n"
     REMOVE_IDS = []
@@ -124,7 +124,8 @@ class JSQuAD(Task):
         return answer
 
     def construct_requests(self, doc, ctx):
-        continuation = rf.greedy_until(ctx, [self.SEP])
+        max_num_tokens = max([len(self.tokenizer.encode(answer, add_special_tokens=False)) for answer in doc["answers"]["text"]])
+        continuation = rf.greedy_until(ctx, [self.SEP], max_num_tokens)
         return continuation
 
     def process_results(self, doc, results):
