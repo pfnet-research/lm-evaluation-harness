@@ -7,7 +7,7 @@ JGLUE has been constructed from scratch without translation.
 
 Homepage: https://github.com/yahoojapan/JGLUE
 """
-from lm_eval.base import MultipleChoiceTask
+from lm_eval.base import MultipleChoiceTask, rf
 
 
 _CITATION = """
@@ -75,12 +75,15 @@ class JCommonsenseQA(MultipleChoiceTask):
             "[答え]:"
         )
     
-    def should_decontaminate(self):
-        return True
+    def doc_to_target(self, doc):
+        return doc["choices"][doc["gold"]]
 
-    def doc_to_decontamination_query(self, doc):
-        return doc["goal"]
-    
+    def construct_requests(self, doc, ctx):
+        lls = [
+            rf.loglikelihood(ctx, "{}".format(choice))[0] for choice in doc["choices"]
+        ]
+
+        return lls
 
 class JCommonsenseQAWithFintanPrompt(JCommonsenseQA):
     """
