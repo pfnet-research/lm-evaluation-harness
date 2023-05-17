@@ -345,7 +345,15 @@ class BaseLM(LM):
             return len(toks), x[0]
 
         re_ord = utils.Reorderer(requests, _collate)
-        for context, until in tqdm(re_ord.get_reordered()):
+        for req in tqdm(re_ord.get_reordered()):
+            if len(req) == 2:
+                context, until = req
+                max_gen_toks = self.max_gen_toks
+            elif len(req) == 3:
+                context, until, max_num_tokens = req
+                max_gen_toks = max_num_tokens
+            else:
+                raise NotImplementedError
             if isinstance(until, str):
                 until = [until]
             # (primary_until,) = self.tok_encode(until[0])   
@@ -355,11 +363,11 @@ class BaseLM(LM):
             else:
                 primary_until = primary_until[-1]
             context_enc = torch.tensor(
-                [self.tok_encode(context)[self.max_gen_toks - self.max_length :]]
+                [self.tok_encode(context)[max_gen_toks - self.max_length :]]
             ).to(self.device)
 
             cont = self._model_generate(
-                context_enc, context_enc.shape[1] + self.max_gen_toks, primary_until
+                context_enc, context_enc.shape[1] + max_gen_toks, primary_until
             )
 
             s = self.tok_decode(cont[0].tolist()[context_enc.shape[1] :])
@@ -391,6 +399,8 @@ class Task(abc.ABC):
 
     # The name of a subset within `DATASET_PATH`.
     DATASET_NAME: str = None
+    # Load tokenizer inside Task class
+    LOAD_TOKENIZER: bool = False
 
     def __init__(self, data_dir=None, cache_dir=None, download_mode=None):
         """
@@ -651,6 +661,9 @@ class Task(abc.ABC):
 
         example = self.doc_to_text(doc)
         return description + labeled_examples + example
+    
+    def set_tokenizer(self, tokenizer):
+        self.tokenizer = tokenizer
 
 
 class MultipleChoiceTask(Task):
