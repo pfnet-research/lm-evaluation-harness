@@ -8,28 +8,44 @@ import sys
 from collections import Counter
 
 
+
+def remove_punc(tokens):
+    exclude = "！？｡。＂＃＄％＆＇（）＊＋，－／：；＜＝＞＠［＼］＾＿｀｛｜｝～｟｠｢｣､、〃》「」『』【】〔〕〖〗〘〙〚〛〜〝〞〟〰〾〿–—‘’‛“”„‟…‧﹏."
+    exclude += string.punctuation
+    exclude = [*exclude]
+    return [tok for tok in tokens if tok not in exclude]
+
+
 def normalize_answer(s):
     """Lower text and remove punctuation, articles and extra whitespace."""
-
-    def remove_articles(text):
-        return re.sub(r"\b(a|an|the)\b", " ", text)
+    import emoji
+    import neologdn
 
     def white_space_fix(text):
         return " ".join(text.split())
-
-    def remove_punc(text):
-        exclude = set(string.punctuation)
-        return "".join(ch for ch in text if ch not in exclude)
-
-    def lower(text):
-        return text.lower()
-
-    return white_space_fix(remove_articles(remove_punc(lower(s))))
+    
+    def remove_emoji(text):
+        text = "".join(["" if emoji.is_emoji(c) else c for c in text])
+        emoji_pattern = re.compile(
+            "["
+            u"\U0001F600-\U0001F64F"  # emoticons
+            u"\U0001F300-\U0001F5FF"  # symbols & pictographs
+            u"\U0001F680-\U0001F6FF"  # transport & map symbols
+            u"\U0001F1E0-\U0001F1FF"  # flags (iOS)
+            u"\U00002702-\U000027B0"
+            "]+",
+            flags=re.UNICODE,
+        )
+        return emoji_pattern.sub(r"", text)
+    
+    return white_space_fix((neologdn.normalize(remove_emoji(s))))
 
 
 def f1_score(prediction, ground_truth):
-    prediction_tokens = normalize_answer(prediction).split()
-    ground_truth_tokens = normalize_answer(ground_truth).split()
+    from fugashi import Tagger
+    tagger = Tagger('-Owakati')
+    prediction_tokens = remove_punc(tagger.parse(normalize_answer(prediction)).split())
+    ground_truth_tokens = remove_punc(tagger.parse(normalize_answer(ground_truth)).split())
     common = Counter(prediction_tokens) & Counter(ground_truth_tokens)
     num_same = sum(common.values())
     if num_same == 0:
@@ -52,7 +68,7 @@ def metric_max_over_ground_truths(metric_fn, prediction, ground_truths):
     return max(scores_for_ground_truths)
 
 
-def compute_score(dataset, predictions):
+def evaluate(dataset, predictions):
     f1 = exact_match = total = 0
     for article in dataset:
         for paragraph in article["paragraphs"]:
@@ -62,7 +78,7 @@ def compute_score(dataset, predictions):
                     message = "Unanswered question " + qa["id"] + " will receive score 0."
                     print(message, file=sys.stderr)
                     continue
-                ground_truths = list(map(lambda x: x["text"], qa["answers"]))
+                ground_truths = [x["text"] for x in qa["answers"]]
                 prediction = predictions[qa["id"]]
                 exact_match += metric_max_over_ground_truths(exact_match_score, prediction, ground_truths)
                 f1 += metric_max_over_ground_truths(f1_score, prediction, ground_truths)
@@ -89,4 +105,4 @@ if __name__ == "__main__":
         dataset = dataset_json["data"]
     with open(args.prediction_file) as prediction_file:
         predictions = json.load(prediction_file)
-    print(json.dumps(compute_score(dataset, predictions)))
+    print(json.dumps(evaluate(dataset, predictions)))

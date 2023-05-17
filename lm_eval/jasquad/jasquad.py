@@ -1,4 +1,4 @@
-# Copyright 2020 The HuggingFace Evaluate Authors.
+# Copyright 2020 The HuggingFace Datasets Authors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,9 +15,7 @@
 
 import datasets
 
-import evaluate
-
-from .compute_score import compute_score
+from .evaluate import evaluate
 
 
 _CITATION = """\
@@ -58,17 +56,17 @@ Examples:
 
     >>> predictions = [{'prediction_text': '1976', 'id': '56e10a3be3433e1400422b22'}]
     >>> references = [{'answers': {'answer_start': [97], 'text': ['1976']}, 'id': '56e10a3be3433e1400422b22'}]
-    >>> squad_metric = evaluate.load("squad")
+    >>> squad_metric = datasets.load_metric("squad")
     >>> results = squad_metric.compute(predictions=predictions, references=references)
     >>> print(results)
     {'exact_match': 100.0, 'f1': 100.0}
 """
 
 
-@evaluate.utils.file_utils.add_start_docstrings(_DESCRIPTION, _KWARGS_DESCRIPTION)
-class Squad(evaluate.Metric):
+@datasets.utils.file_utils.add_start_docstrings(_DESCRIPTION, _KWARGS_DESCRIPTION)
+class JaSquad(datasets.Metric):
     def _info(self):
-        return evaluate.MetricInfo(
+        return datasets.MetricInfo(
             description=_DESCRIPTION,
             citation=_CITATION,
             inputs_description=_KWARGS_DESCRIPTION,
@@ -107,5 +105,5 @@ class Squad(evaluate.Metric):
                 ]
             }
         ]
-        score = compute_score(dataset=dataset, predictions=pred_dict)
+        score = evaluate(dataset=dataset, predictions=pred_dict)
         return score

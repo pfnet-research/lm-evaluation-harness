@@ -12,6 +12,7 @@ import datasets
 from math import exp
 from lm_eval.base import rf, Task
 from functools import partial
+from lm_eval.jasquad import jasquad
 
 _CITATION = """
 @inproceedings{kurihara-etal-2022-jglue,
@@ -36,7 +37,8 @@ DYNAMIC_MAX_LENGTH = os.getenv("DYNAMIC_MAX_LENGTH", "true").lower()
 
 def _squad_metric(predictions, references):
     # https://github.com/huggingface/datasets/tree/main/metrics/squad
-    squad_metric = datasets.load_metric("squad")
+    print(jasquad.__file__)
+    squad_metric = datasets.load_metric(jasquad.__file__)
     return squad_metric.compute(predictions=predictions, references=references)
 
 
@@ -127,13 +129,14 @@ class JSQuAD(Task):
         return answer
 
     def construct_requests(self, doc, ctx):
-        if DYNAMIC_MAX_LENGTH == "false":
+        # if the lm's class is CachingLM, DYNAMIC_MAX_LENGTH isn't performed. 
+        if DYNAMIC_MAX_LENGTH == "false" or not hasattr(self.tokenizer, "encode"):
             continuation = rf.greedy_until(ctx, [self.SEP])
         else:
             max_num_tokens = max([len(self.tokenizer.encode(answer, add_special_tokens=False)) for answer in doc["answers"]["text"]])
             continuation = rf.greedy_until(ctx, [self.SEP], max_num_tokens)
         return continuation
-
+    
     def process_results(self, doc, results):
         continuation = results
         predictions = {
