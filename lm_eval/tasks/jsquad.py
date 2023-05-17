@@ -36,8 +36,6 @@ DYNAMIC_MAX_LENGTH = os.getenv("DYNAMIC_MAX_LENGTH", "true").lower()
 
 
 def _squad_metric(predictions, references):
-    # https://github.com/huggingface/datasets/tree/main/metrics/squad
-    print(jasquad.__file__)
     squad_metric = datasets.load_metric(jasquad.__file__)
     return squad_metric.compute(predictions=predictions, references=references)
 
