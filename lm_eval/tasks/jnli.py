@@ -38,8 +38,8 @@ class JNLIWithFintanPrompt(MultipleChoiceTask):
     DATASET_NAME = "JNLI"
     DESCRIPTION = "前提と仮説の関係をentailment、contradiction、neutralの中から回答してください。\n\n" + \
         "制約:\n" + \
-        "- 前提から仮説が、論理的知識や常識的知識を用いて導出可能である場合はentailmentと出力" + \
-        "- 前提と仮説が両立しえない場合はcontradictionと出力" + \
+        "- 前提から仮説が、論理的知識や常識的知識を用いて導出可能である場合はentailmentと出力\n" + \
+        "- 前提と仮説が両立しえない場合はcontradictionと出力\n" + \
         "- そのいずれでもない場合はneutralと出力\n\n"
     CHOICES = ["entailment", "contradiction", "neutral"]
 
@@ -87,6 +87,8 @@ class JNLIWithFintanPrompt(MultipleChoiceTask):
         lls = [
             rf.loglikelihood(ctx, "{}".format(choice))[0] for choice in doc["choices"]
         ]
+
+
 
         return lls
 
