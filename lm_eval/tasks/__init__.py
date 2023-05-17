@@ -55,6 +55,7 @@ from . import crowspairs
 from . import jsquad
 from . import jaquad
 from . import jcommonsenseqa
+from . import marc_ja
 
 ########################################
 # Translation tasks
@@ -320,6 +321,8 @@ TASK_REGISTRY = {
     **jaquad.construct_tasks(),
     "jcommonsenseqa": jcommonsenseqa.JCommonsenseQA,
     **jcommonsenseqa.construct_tasks(),
+    "marc_ja": marc_ja.MARCJaWithFintanPrompt,
+    **marc_ja.construct_tasks(),
 }
 
 
