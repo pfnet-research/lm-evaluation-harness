@@ -7,6 +7,7 @@ JGLUE has been constructed from scratch without translation.
 
 Homepage: https://github.com/yahoojapan/JGLUE
 """
+import os
 import datasets
 from math import exp
 from lm_eval.base import rf, Task
@@ -29,6 +30,8 @@ _CITATION = """
 }
 """
 
+
+DYNAMIC_MAX_LENGTH = os.getenv("DYNAMIC_MAX_LENGTH", "true").lower()
 
 
 def _squad_metric(predictions, references):
@@ -124,8 +127,11 @@ class JSQuAD(Task):
         return answer
 
     def construct_requests(self, doc, ctx):
-        max_num_tokens = max([len(self.tokenizer.encode(answer, add_special_tokens=False)) for answer in doc["answers"]["text"]])
-        continuation = rf.greedy_until(ctx, [self.SEP], max_num_tokens)
+        if DYNAMIC_MAX_LENGTH == "false":
+            continuation = rf.greedy_until(ctx, [self.SEP])
+        else:
+            max_num_tokens = max([len(self.tokenizer.encode(answer, add_special_tokens=False)) for answer in doc["answers"]["text"]])
+            continuation = rf.greedy_until(ctx, [self.SEP], max_num_tokens)
         return continuation
 
     def process_results(self, doc, results):
