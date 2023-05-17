@@ -56,6 +56,8 @@ from . import jsquad
 from . import jaquad
 from . import jcommonsenseqa
 from . import jnli
+from . import marc_ja
+
 
 ########################################
 # Translation tasks
@@ -323,6 +325,8 @@ TASK_REGISTRY = {
     **jcommonsenseqa.construct_tasks(),
     "jnli": jnli.JNLIWithFintanPrompt,
     **jnli.construct_tasks(),
+    "marc_ja": marc_ja.MARCJaWithFintanPrompt,
+    **marc_ja.construct_tasks(),
 }
 
 

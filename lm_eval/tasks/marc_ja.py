@@ -9,7 +9,6 @@ Homepage: https://github.com/yahoojapan/JGLUE
 """
 from lm_eval.base import MultipleChoiceTask, rf
 
-
 _CITATION = """
 @inproceedings{kurihara-etal-2022-jglue,
     title = "{JGLUE}: {J}apanese General Language Understanding Evaluation",
@@ -29,15 +28,16 @@ _CITATION = """
 
 
 
-class JCommonsenseQA(MultipleChoiceTask):
+class MARCJaWithFintanPrompt(MultipleChoiceTask):
     """
-    prompt format is taken from [日本語に特化した60億パラメータ規模のGPTモデルの構築と評価](https://www.anlp.jp/proceedings/annual_meeting/2023/pdf_dir/H9-4.pdf)
+    prompt template is taken from [ChatGPT vs BERT: どちらが日本語をより理解できるのか?](https://fintan.jp/page/9126/)
     """
     VERSION = 1.1
-    PROMPT_VERSION = 0.1
+    PROMPT_VERSION = 0.2
     DATASET_PATH = "shunk031/JGLUE"
-    DATASET_NAME = "JCommonsenseQA"
-    DESCRIPTION = "[問題]に対する[答え]を[選択肢]の中から選んでください。\n\n"
+    DATASET_NAME = "MARC-ja"
+    DESCRIPTION = "製品レビューをnegativeかpositiveのいずれかのセンチメントに分類してください。出力は小文字化してください。 \n\n"
+    CHOICES = ["positive", "negative"]
 
     def has_training_docs(self):
         return True
@@ -58,23 +58,21 @@ class JCommonsenseQA(MultipleChoiceTask):
 
     def _process_doc(self, doc):
         return {
-            "goal": doc["question"],
-            "choices": [doc[f"choice{i}"] for i in range(5)],
-            "gold": doc["label"], 
+            "query": doc["sentence"],
+            "choices": self.CHOICES,
+            "gold": int(doc["label"]), 
         }
 
     def doc_to_text(self, doc):
         """
-        [問題]:question
-        [選択肢]:[choice0, choice1, ..., choice4]
-        [答え]:
+        製品レビュー:{query}
+        センチメント:
         """
         return (
-            f"[問題]:{doc['goal']}\n"
-            f"[選択肢]:[{', '.join(doc['choices'])}]\n"
-            "[答え]:"
+            f"製品レビュー:{doc['query']}\n"
+            "センチメント:"
         )
-    
+
     def doc_to_target(self, doc):
         return doc["choices"][doc["gold"]]
 
@@ -85,36 +83,13 @@ class JCommonsenseQA(MultipleChoiceTask):
 
         return lls
 
-class JCommonsenseQAWithFintanPrompt(JCommonsenseQA):
-    """
-    prompt template is taken from [ChatGPT vs BERT: どちらが日本語をより理解できるのか?](https://fintan.jp/page/9126/)
-    """
-    VERSION = 1.1
-    PROMPT_VERSION = 0.2
-    DESCRIPTION = "質問と回答の選択肢を入力として受け取り、選択肢から回答を選択してください。なお、回答は選択肢の番号(例:0)でするものとします。 \n\n"
-
-
-    def doc_to_text(self, doc):
-        """
-        質問:question
-        選択肢:0.choice0,1.choice1, ...,4.choice4
-        回答:
-        """
-        choices = ",".join([f"{idx}.{choice}" for idx, choice in enumerate(doc['choices'])])
-        return (
-            f"質問:{doc['goal']}\n"
-            f"選択肢:{choices}\n"
-            "回答:"
-        )
-
 VERSIONS = [
-    JCommonsenseQA,
-    JCommonsenseQAWithFintanPrompt,
+    MARCJaWithFintanPrompt,
 ]
 
 
 def construct_tasks():
     tasks = {}
     for version_class in VERSIONS:
-        tasks[f"jcommonsenseqa-{version_class.VERSION}-{version_class.PROMPT_VERSION}"] = version_class
+        tasks[f"marc_ja-{version_class.VERSION}-{version_class.PROMPT_VERSION}"] = version_class
     return tasks
