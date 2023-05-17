@@ -35,7 +35,7 @@ def parse_args():
     parser.add_argument("--batch_size", type=str, default=None)
     parser.add_argument("--device", type=str, default=None)
     parser.add_argument("--output_path", default=None)
-    parser.add_argument("--limit", type=int, default=None)
+    parser.add_argument("--limit", type=str, default=None)
     parser.add_argument("--no_cache", action="store_true")
     parser.add_argument("--decontamination_ngrams_path", default=None)
     parser.add_argument("--description_dict_path", default=None)
@@ -74,6 +74,10 @@ def main():
         num_fewshot = [int(n) for n in args.num_fewshot.split(",")]
     else:
         num_fewshot = int(args.num_fewshot)
+    if "," in args.limit:
+        limit = [int(n) if n.isdigit() else float(n) for n in args.limit.split(",")]
+    else:
+        limit = int(args.limit)
 
     description_dict = {}
     if args.description_dict_path:
@@ -87,7 +91,7 @@ def main():
         batch_size=args.batch_size,
         device=args.device,
         no_cache=args.no_cache,
-        limit=args.limit,
+        limit=limit,
         description_dict=description_dict,
         decontamination_ngrams_path=args.decontamination_ngrams_path,
         check_integrity=args.check_integrity,
