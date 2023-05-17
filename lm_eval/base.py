@@ -93,12 +93,14 @@ class LM(abc.ABC):
         """Generate greedily until a stopping sequence
 
         :param requests: list
-            A list of pairs (context, until)
+            A list of pairs (context, until) or (context, until, max_num_tokens)
             context: str
                 Context string
             until: [str]
                 The string sequences to generate until. These string sequences
                 may each span across multiple tokens, or may be part of one token.
+            (optional) max_num_tokens: int
+                Indicate the max length of the generation
         :return: list
             A list of strings continuation
             continuation: str
