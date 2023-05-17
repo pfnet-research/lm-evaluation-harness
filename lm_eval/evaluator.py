@@ -42,7 +42,7 @@ def simple_evaluate(
         PyTorch device (e.g. "cpu" or "cuda:0") for running models
     :param no_cache: bool
         Whether or not to cache
-    :param limit: int, optional
+    :param limit: int or list of int, optional
         Limit the number of examples per task (only use this for testing)
     :param bootstrap_iters:
         Number of iterations for bootstrap statistics
@@ -133,7 +133,7 @@ def evaluate(
         Not implemented, and this option is deprecated and will be removed in a future version in favor of a different description providing method
     :param num_fewshot: int or list of int 
         Number of examples in few-shot context
-    :param limit: int, optional
+    :param limit: int or list of int, optional
         Limit the number of examples per task (only use this for testing)
     :param bootstrap_iters:
         Number of iterations for bootstrap statistics
@@ -156,6 +156,12 @@ def evaluate(
     else:
         # num_fewshot is int
         num_fewshot = [num_fewshot] * len(task_dict)
+    if isinstance(limit, list):
+        assert len(task_dict) == len(limit), f"The number of tasks ({len(task_dict)}) must be same as the number of elements in `num_fewshot` ({len(limit)})"
+    else:
+        # limit is int or None
+        limit = [limit] * len(task_dict)
+    
     decontaminate = decontamination_ngrams_path is not None
 
     task_dict_items = [
@@ -211,7 +217,11 @@ def evaluate(
         if task.LOAD_TOKENIZER:
             task.set_tokenizer(lm.tokenizer)
         
-        for doc_id, doc in enumerate(itertools.islice(task_docs, 0, limit)):
+        limit_local = limit[idx]
+        if isinstance(limit_local, float):
+            limit_local = int(limit_local * len(task_docs))
+            print(f"Use {limit_local}/{len(task_docs)} samples corresponding to the ratio of {limit[idx]}")
+        for doc_id, doc in enumerate(itertools.islice(task_docs, 0, limit_local)):
 
             if decontaminate and task.should_decontaminate():
                 docs_for_decontamination[(task_name, task_set)].append(
