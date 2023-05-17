@@ -207,7 +207,10 @@ def evaluate(
             if description_dict and task_name in description_dict
             else ""
         )
-
+        # set tokenizer inside task 
+        if task.LOAD_TOKENIZER:
+            task.set_tokenizer(lm.tokenizer)
+        
         for doc_id, doc in enumerate(itertools.islice(task_docs, 0, limit)):
 
             if decontaminate and task.should_decontaminate():
