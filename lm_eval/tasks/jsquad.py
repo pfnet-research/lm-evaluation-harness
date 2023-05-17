@@ -33,11 +33,11 @@ _CITATION = """
 
 
 DYNAMIC_MAX_LENGTH = os.getenv("DYNAMIC_MAX_LENGTH", "true").lower()
+JASQUAD_METRIC = datasets.load_metric(jasquad.__file__)
 
 
 def _squad_metric(predictions, references):
-    squad_metric = datasets.load_metric(jasquad.__file__)
-    return squad_metric.compute(predictions=predictions, references=references)
+    return JASQUAD_METRIC.compute(predictions=predictions, references=references)
 
 
 def _squad_agg(key, item):
@@ -136,7 +136,8 @@ class JSQuAD(Task):
         return continuation
     
     def process_results(self, doc, results):
-        continuation = results
+        assert len(results) == 1, f"results should be a list with 1 str element, but is {results}"
+        continuation = results[0]
         predictions = {
             "id": doc["id"],
             "prediction_text": continuation,
