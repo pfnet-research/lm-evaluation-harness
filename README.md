@@ -7,7 +7,7 @@ To install `lm-eval` from the github repository main branch, run:
 ```bash
 git clone -b jp-stable https://github.com/Stability-AI/lm-evaluation-harness.git
 cd lm-evaluation-harness
-pip install -e .
+pip install -e ".[ja]"
 ```
 
 ## JP Metrics 
