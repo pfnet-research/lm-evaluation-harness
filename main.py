@@ -74,11 +74,14 @@ def main():
         num_fewshot = [int(n) for n in args.num_fewshot.split(",")]
     else:
         num_fewshot = int(args.num_fewshot)
-    if "," in args.limit:
-        limit = [int(n) if n.isdigit() else float(n) for n in args.limit.split(",")]
+    
+    if args.limit is not None:
+        if "," in args.limit:
+            limit = [int(n) if n.isdigit() else float(n) for n in args.limit.split(",")]
+        else:
+            limit = int(args.limit)
     else:
-        limit = int(args.limit)
-
+        limit = None
     description_dict = {}
     if args.description_dict_path:
         with open(args.description_dict_path, "r") as f:
