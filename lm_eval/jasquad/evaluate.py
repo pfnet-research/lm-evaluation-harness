@@ -8,14 +8,6 @@ import sys
 from collections import Counter
 
 
-try:
-    import emoji
-    import neologdn
-    from fugashi import Tagger
-except ImportError:
-    raise ImportError("""Please run `pip install -e .[ja]` to install dependencies for Japanese SQuAD.""")
-
-
 def remove_punc(tokens):
     exclude = "！？｡。＂＃＄％＆＇（）＊＋，－／：；＜＝＞＠［＼］＾＿｀｛｜｝～｟｠｢｣､、〃》「」『』【】〔〕〖〗〘〙〚〛〜〝〞〟〰〾〿–—‘’‛“”„‟…‧﹏."
     exclude += string.punctuation
@@ -25,6 +17,10 @@ def remove_punc(tokens):
 
 def normalize_answer(s):
     """Lower text and remove punctuation, articles and extra whitespace."""
+    import emoji
+    import neologdn
+
+
     def white_space_fix(text):
         return " ".join(text.split())
     
@@ -46,6 +42,8 @@ def normalize_answer(s):
 
 
 def f1_score(prediction, ground_truth):
+    from fugashi import Tagger
+
     tagger = Tagger('-Owakati')
     prediction_tokens = remove_punc(tagger.parse(normalize_answer(prediction)).split())
     ground_truth_tokens = remove_punc(tagger.parse(normalize_answer(ground_truth)).split())
