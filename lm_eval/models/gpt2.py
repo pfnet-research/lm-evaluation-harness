@@ -16,7 +16,7 @@ class HFLM(BaseLM):
         batch_size=1,
         load_in_8bit: Optional[bool] = False,
         trust_remote_code: Optional[bool] = False,
-        use_fast: Optional[bool] = False
+        use_fast: Optional[bool] = True
     ):
         super().__init__()
 
