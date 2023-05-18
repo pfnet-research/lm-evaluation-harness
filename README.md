@@ -11,9 +11,12 @@ pip install -e ".[ja]"
 ```
 
 ## JP Metrics 
-- JSQuAD
-- JCommonsenseQA
-- JaQuAD
+- [JGLUE](https://github.com/yahoojapan/JGLUE)
+  - JSQuAD
+  - JCommonsenseQA
+  - JNLI
+  - MARC-ja
+- [JaQuAD](https://huggingface.co/datasets/SkelterLabsInc/JaQuAD)
 - LAMBADA (1k) translated by DeepL (experimental)
 
 ## Examples
@@ -23,12 +26,12 @@ pip install -e ".[ja]"
 ### Using HF checkpoints
 ```
 MODEL_ARGS="pretrained=abeja/gpt-neox-japanese-2.7b,low_cpu_mem_usage=True"
-TASK="jsquad,jaquad" # jsquad, jaquad, jcommonsenseqa, lambada_openai_mt_ja
+TASK="jsquad,jcommonsenseqa"
 python scripts/lm_harness_main.py \
     --model hf-causal \
     --model_args $MODEL_ARGS \
     --tasks $TASK \
-    --num_fewshot 2 \
+    --num_fewshot "2,3" \
     --device "cuda" 
 ```
 
