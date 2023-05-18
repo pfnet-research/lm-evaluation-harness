@@ -215,7 +215,10 @@ def evaluate(
         )
         # set tokenizer inside task 
         if task.LOAD_TOKENIZER:
-            task.set_tokenizer(lm.tokenizer)
+            if isinstance(lm, lm_eval.base.CachingLM):
+                task.set_tokenizer(lm.lm.tokenizer)
+            else:
+                task.set_tokenizer(lm.tokenizer)
         
         limit_local = limit[idx]
         if isinstance(limit_local, float):

@@ -117,7 +117,6 @@ class JSQuAD(Task):
         return answer
 
     def construct_requests(self, doc, ctx):
-        # if the lm's class is CachingLM, DYNAMIC_MAX_LENGTH isn't performed. 
         if DYNAMIC_MAX_LENGTH == "false" or not hasattr(self.tokenizer, "encode"):
             continuation = rf.greedy_until(ctx, [self.SEP])
         else:
