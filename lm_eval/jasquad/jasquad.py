@@ -105,5 +105,15 @@ class JaSquad(datasets.Metric):
                 ]
             }
         ]
+        score = getattr(self, "cached_s", None)
+        if score:
+            cached_p = getattr(self, "cached_p", None)
+            cached_r = getattr(self, "cached_r", None)
+            if cached_p == predictions and cached_r == references:
+                return score
+
         score = evaluate(dataset=dataset, predictions=pred_dict)
+        setattr(self, "cached_s", score)
+        setattr(self, "cached_p", list(predictions))
+        setattr(self, "cached_r", list(references))
         return score
