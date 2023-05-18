@@ -33,11 +33,11 @@ _CITATION = """
 
 
 DYNAMIC_MAX_LENGTH = os.getenv("DYNAMIC_MAX_LENGTH", "true").lower()
-JASQUAD_METRIC = datasets.load_metric(jasquad.__file__)
 
 
 def _squad_metric(predictions, references):
-    return JASQUAD_METRIC.compute(predictions=predictions, references=references)
+    squad_metric = datasets.load_metric(jasquad.__file__)
+    return squad_metric.compute(predictions=predictions, references=references)
 
 
 def _squad_agg(key, item):
