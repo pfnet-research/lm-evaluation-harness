@@ -1,0 +1,48 @@
+{
+  "results": {
+    "jcommonsenseqa-1.1-0.2": {
+      "acc": 0.38873994638069703,
+      "acc_stderr": 0.014578797076976456,
+      "acc_norm": 0.38873994638069703,
+      "acc_norm_stderr": 0.014578797076976456
+    },
+    "jnli-1.1-0.2": {
+      "acc": 0.40345110928512734,
+      "acc_stderr": 0.009945976384444125,
+      "acc_norm": 0.37674609695973704,
+      "acc_norm_stderr": 0.009823942907406487
+    },
+    "marc_ja-1.1-0.2": {
+      "acc": 0.8620509243111266,
+      "acc_stderr": 0.004554438976572761,
+      "acc_norm": 0.8620509243111266,
+      "acc_norm_stderr": 0.004554438976572761
+    },
+    "jsquad-1.1-0.2": {
+      "exact_match": 41.647906348491674,
+      "f1": 53.3615935638234
+    }
+  },
+  "versions": {
+    "jcommonsenseqa-1.1-0.2": 1.1,
+    "jnli-1.1-0.2": 1.1,
+    "jsquad-1.1-0.2": 1.1,
+    "marc_ja-1.1-0.2": 1.1
+  },
+  "config": {
+    "model": "hf-causal",
+    "model_args": "pretrained=cyberagent/open-calm-3b",
+    "num_fewshot": [
+      2,
+      3,
+      3,
+      3
+    ],
+    "batch_size": null,
+    "device": "cuda",
+    "no_cache": false,
+    "limit": null,
+    "bootstrap_iters": 100000,
+    "description_dict": {}
+  }
+}
