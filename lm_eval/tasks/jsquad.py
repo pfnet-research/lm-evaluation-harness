@@ -8,6 +8,7 @@ JGLUE has been constructed from scratch without translation.
 Homepage: https://github.com/yahoojapan/JGLUE
 """
 import os
+import inspect
 import datasets
 from math import exp
 from lm_eval.base import rf, Task
@@ -32,7 +33,7 @@ _CITATION = """
 """
 
 
-DYNAMIC_MAX_LENGTH = os.getenv("DYNAMIC_MAX_LENGTH", "true").lower()
+DYNAMIC_MAX_LENGTH = os.getenv("DYNAMIC_MAX_LENGTH", "false").lower()
 
 
 class JSQuAD(Task):
@@ -121,7 +122,12 @@ class JSQuAD(Task):
         if DYNAMIC_MAX_LENGTH == "false" or not hasattr(self.tokenizer, "encode"):
             continuation = rf.greedy_until(ctx, [self.SEP])
         else:
-            max_num_tokens = max([len(self.tokenizer.encode(answer, add_special_tokens=False)) for answer in doc["answers"]["text"]])
+            encode_fn = self.tokenizer.encode
+            if "add_special_tokens" in inspect.getfullargspec(encode_fn).args:
+                encode_params = dict(add_special_tokens=False)
+            else:
+                encode_params = {}
+            max_num_tokens = max([len(encode_fn(answer, **encode_params)) for answer in doc["answers"]["text"]])
             continuation = rf.greedy_until(ctx, [self.SEP], max_num_tokens)
         return continuation
     
