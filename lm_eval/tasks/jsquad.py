@@ -33,7 +33,7 @@ _CITATION = """
 """
 
 
-DYNAMIC_MAX_LENGTH = os.getenv("DYNAMIC_MAX_LENGTH", "false").lower()
+DYNAMIC_MAX_LENGTH = os.getenv("DYNAMIC_MAX_LENGTH", "true").lower()
 
 
 class JSQuAD(Task):
