@@ -23,6 +23,7 @@ def simple_evaluate(
     description_dict=None,
     check_integrity=False,
     decontamination_ngrams_path=None,
+    verbose=False,
 ):
 
     """Instantiate and evaluate a model on a list of tasks.
@@ -91,6 +92,7 @@ def simple_evaluate(
         bootstrap_iters=bootstrap_iters,
         description_dict=description_dict,
         decontamination_ngrams_path=decontamination_ngrams_path,
+        verbose=verbose,
     )
 
     # add info about the model and few shot config
@@ -122,6 +124,7 @@ def evaluate(
     bootstrap_iters=100000,
     description_dict=None,
     decontamination_ngrams_path=None,
+    verbose=False,
 ):
     """Instantiate and evaluate a model on a list of tasks.
 
@@ -319,7 +322,7 @@ def evaluate(
         if stderr is not None:
             results[task_name][metric + "_stderr"] = stderr(items)
 
-        if task_name in details:
+        if verbose and task_name in details:
             results["details"] = details[task_name]
 
     return {"results": dict(results), "versions": dict(versions)}
