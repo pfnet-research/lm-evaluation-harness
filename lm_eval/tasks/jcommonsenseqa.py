@@ -8,6 +8,7 @@ JGLUE has been constructed from scratch without translation.
 Homepage: https://github.com/yahoojapan/JGLUE
 """
 from lm_eval.base import MultipleChoiceTask, rf
+import numpy as np
 
 
 _CITATION = """
@@ -84,6 +85,30 @@ class JCommonsenseQA(MultipleChoiceTask):
         ]
 
         return lls
+
+    def process_results(self, doc, results):
+        gold = doc["gold"]
+
+        response = np.argmax(results)
+        acc = 1.0 if response == gold else 0.0
+        completion_len = np.array([float(len(i)) for i in doc["choices"]])
+        acc_norm = 1.0 if np.argmax(results / completion_len) == gold else 0.0
+
+        out = {
+            "acc": acc,
+            "acc_norm": acc_norm,
+        }
+        # only include details if we were wrong
+        if acc == 0.0:
+            # without the cast it won't serialize
+            response = int(response)
+            out["details"] = {
+                "question": doc["goal"],
+                "choices": doc["choices"],
+                "gold": doc["gold"],
+                "response": response,
+            }
+        return out
 
 class JCommonsenseQAWithFintanPrompt(JCommonsenseQA):
     """

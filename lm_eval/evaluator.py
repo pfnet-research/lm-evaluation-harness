@@ -23,6 +23,7 @@ def simple_evaluate(
     description_dict=None,
     check_integrity=False,
     decontamination_ngrams_path=None,
+    verbose=False,
 ):
 
     """Instantiate and evaluate a model on a list of tasks.
@@ -91,6 +92,7 @@ def simple_evaluate(
         bootstrap_iters=bootstrap_iters,
         description_dict=description_dict,
         decontamination_ngrams_path=decontamination_ngrams_path,
+        verbose=verbose,
     )
 
     # add info about the model and few shot config
@@ -122,6 +124,7 @@ def evaluate(
     bootstrap_iters=100000,
     description_dict=None,
     decontamination_ngrams_path=None,
+    verbose=False,
 ):
     """Instantiate and evaluate a model on a list of tasks.
 
@@ -273,6 +276,8 @@ def evaluate(
             process_res_queue[(task_name, doc_id)].append((i, resp))
 
     vals = collections.defaultdict(list)
+    # holds detailed responses for error analysis
+    details = collections.defaultdict(list)
 
     # unpack results and sort back in order and return control to Task
     for (task_name, doc_id), requests in process_res_queue.items():
@@ -283,6 +288,9 @@ def evaluate(
         doc = docs[(task_name, doc_id)]
 
         metrics = task.process_results(doc, requests)
+        if "details" in metrics:
+            details[task_name].append(metrics["details"])
+            del metrics["details"]
         for metric, value in metrics.items():
             vals[(task_name, metric)].append(value)
 
@@ -313,6 +321,9 @@ def evaluate(
 
         if stderr is not None:
             results[task_name][metric + "_stderr"] = stderr(items)
+
+        if verbose and task_name in details:
+            results["details"] = details[task_name]
 
     return {"results": dict(results), "versions": dict(versions)}
 
