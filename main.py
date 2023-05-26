@@ -100,7 +100,7 @@ def main():
         check_integrity=args.check_integrity,
     )
 
-    dumped = json.dumps(results, indent=2)
+    dumped = json.dumps(results, indent=2, ensure_ascii=False)
     print(dumped)
 
     if args.output_path:
