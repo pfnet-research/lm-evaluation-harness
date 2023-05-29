@@ -131,6 +131,10 @@ class JCommonsenseQAWithFintanPrompt(JCommonsenseQA):
             f"選択肢:{choices}\n"
             "回答:"
         )
+    
+    def doc_to_target(self, doc):
+        return f"{doc['gold']}"
+    
 
 VERSIONS = [
     JCommonsenseQA,
