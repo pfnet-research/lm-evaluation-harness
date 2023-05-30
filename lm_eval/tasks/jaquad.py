@@ -12,7 +12,9 @@ Homepage: https://github.com/SkelterLabsInc/JaQuAD
 """
 from .jsquad import (
     JSQuAD, 
-    JSQuADWithFintanPrompt
+    JSQuADWithFintanPrompt,
+    JSQuADWithJAAlpacaPrompt,
+    JSQuADWithRinnaInstructionSFT,
 )
 
 
@@ -58,10 +60,19 @@ class JaQuADWithFintanPrompt(JSQuADWithFintanPrompt, JaQuAD):
     PROMPT_VERSION = 0.2
 
 
+class JaQuADWithJAAlpacaPrompt(JSQuADWithJAAlpacaPrompt, JaQuAD):
+    PROMPT_VERSION = 0.3
+
+
+class JaQuADWithRinnaInstructionSFT(JSQuADWithRinnaInstructionSFT, JaQuAD):
+    PROMPT_VERSION = 0.4
+
 
 VERSIONS = [
     JaQuAD,
     JaQuADWithFintanPrompt,
+    JaQuADWithJAAlpacaPrompt,
+    JaQuADWithRinnaInstructionSFT,
 ]
 
 

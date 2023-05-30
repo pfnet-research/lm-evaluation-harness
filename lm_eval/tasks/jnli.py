@@ -87,13 +87,55 @@ class JNLIWithFintanPrompt(MultipleChoiceTask):
         lls = [
             rf.loglikelihood(ctx, "{}".format(choice))[0] for choice in doc["choices"]
         ]
-
-
-
         return lls
+
+
+
+class JNLIWithJAAlpacaPrompt(JNLIWithFintanPrompt):
+    """
+    Reference:
+    - data: https://huggingface.co/datasets/fujiki/japanese_alpaca_data
+    - code: https://github.com/Stability-AI/gpt-neox/blob/c130a4edc1120dccec8f02a34eb60d3e8f484cd3/finetune/finetune_base_ja.py#LL118C23-L127C11
+    """
+    PROMPT_VERSION = 0.3
+    DESCRIPTION = "以下は、タスクを説明する指示と、文脈のある入力の組み合わせです。要求を適切に満たす応答を書きなさい。\n\n\n"
+    INSTRUCTION = f"与えられた前提と仮説の関係を回答してください。\n\n出力は以下から選択してください：\n" + "\n".join(JNLIWithFintanPrompt.CHOICES)
+
+    def doc_to_text(self, doc):
+        """
+        以下は、タスクを説明する指示と、文脈のある入力の組み合わせです。要求を適切に満たす応答を書きなさい。
+
+        ### 指示: 
+        {instruction}
+
+        ### 入力: 
+        {input}
+
+        ### 応答: 
+        {response}
+        """
+        input_text = f"前提：{doc['premise']}\n仮説：{doc['hypothesis']}"
+        return f"### 指示:\n{self.INSTRUCTION}\n\n### 入力:\n{input_text}\n\n### 応答:\n"
+
+
+
+class JNLIWithRinnaInstructionSFT(JNLIWithFintanPrompt):
+    """
+    Reference:
+    - HF Hub: https://huggingface.co/rinna/japanese-gpt-neox-3.6b-instruction-sft
+    """
+    PROMPT_VERSION = 0.4
+    DESCRIPTION = "ユーザー: " + f"与えられた前提と仮説の関係を回答してください。出力は以下から選択してください：<NL>" + "<NL>".join(JNLIWithFintanPrompt.CHOICES) + "<NL>システム: 分かりました。"
+    def doc_to_text(self, doc):
+        input_text = f"前提：{doc['premise']}\n仮説：{doc['hypothesis']}"
+        return f"<NL>ユーザー: {input_text}<NL>システム: "
+   
+
 
 VERSIONS = [
     JNLIWithFintanPrompt,
+    JNLIWithJAAlpacaPrompt,
+    JNLIWithRinnaInstructionSFT,
 ]
 
 
