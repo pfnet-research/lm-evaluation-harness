@@ -83,8 +83,64 @@ class MARCJaWithFintanPrompt(MultipleChoiceTask):
 
         return lls
 
+
+
+class MARCJaWithJAAlpacaPrompt(MARCJaWithFintanPrompt):
+    """
+    This prompt format was inspired by the below data in fujiki/japanese_alpaca_data. 
+    ```
+    {
+        'instruction': '以下のテキストを、ポジティブまたはネガティブの感情クラスのいずれかに分類してください。', 
+        'input': '製品が遅すぎて使い勝手が悪かったので、あまり好きではありませんでした。', 
+        'output': 'ネガティブ。'
+    }
+    ```
+    Reference:
+    - data: https://huggingface.co/datasets/fujiki/japanese_alpaca_data
+    - code: https://github.com/Stability-AI/gpt-neox/blob/c130a4edc1120dccec8f02a34eb60d3e8f484cd3/finetune/finetune_base_ja.py#LL118C23-L127C11
+    """
+    PROMPT_VERSION = 0.3
+    DESCRIPTION = "以下は、タスクを説明する指示と、文脈のある入力の組み合わせです。要求を適切に満たす応答を書きなさい。\n\n\n"
+    INSTRUCTION = "以下の製品レビューを、ポジティブまたはネガティブの感情クラスのいずれかに分類してください。 \n\n"
+    CHOICES = ["ポジティブ", "ネガティブ"]
+
+    def doc_to_text(self, doc):
+        """
+        以下は、タスクを説明する指示と、文脈のある入力の組み合わせです。要求を適切に満たす応答を書きなさい。
+
+        ### 指示: 
+        {instruction}
+
+        ### 入力: 
+        {input}
+
+        ### 応答: 
+        {response}
+        """
+        input_text = doc['query']
+        return f"### 指示:\n{self.INSTRUCTION}\n\n### 入力:\n{input_text}\n\n### 応答:\n"
+
+
+
+class MARCJaWithRinnaInstructionSFT(MARCJaWithFintanPrompt):
+    """
+    Reference:
+    - HF Hub: https://huggingface.co/rinna/japanese-gpt-neox-3.6b-instruction-sft
+    """
+    PROMPT_VERSION = 0.4
+    DESCRIPTION = "ユーザー: 与えられた製品レビューを、ポジティブまたはネガティブの感情クラスのいずれかに分類してください。<NL>システム: 分かりました。"    
+    CHOICES = ["ポジティブ", "ネガティブ"]
+
+    def doc_to_text(self, doc):
+        input_text = doc['query']
+        return f"<NL>ユーザー: {input_text}<NL>システム: "   
+
+
+
 VERSIONS = [
     MARCJaWithFintanPrompt,
+    MARCJaWithJAAlpacaPrompt,
+    MARCJaWithRinnaInstructionSFT,
 ]
 
 
