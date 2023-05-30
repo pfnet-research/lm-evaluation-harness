@@ -1,14 +1,35 @@
 
 # JP Language Model Evaluation Harness
-## Install
 
-To install `lm-eval` from the github repository main branch, run:
+## How to evaluate your model
 
-```bash
-git clone -b jp-stable https://github.com/Stability-AI/lm-evaluation-harness.git
-cd lm-evaluation-harness
-pip install -e ".[ja]"
-```
+1. git clone https://github.com/Stability-AI/lm-evaluation-harness/tree/jp-stable
+    ```bash
+    git clone -b jp-stable https://github.com/Stability-AI/lm-evaluation-harness.git
+    cd lm-evaluation-harness
+    pip install -e ".[ja]"
+    ```
+2. Choose your prompt template based on `docs/prompt_templates.md`
+3. Replace `TEMPLATE` to the version and change `MODEL_PATH` . And, save the script as `harness.sh`
+
+    ```bash
+    MODEL_ARGS="pretrained=MODEL_PATH"
+    TASK="jsquad-1.1-TEMPLATE,jcommonsenseqa-1.1-TEMPLATE,jnli-1.1-TEMPLATE,marc_ja-1.1-TEMPLATE"
+    python main.py \
+        --model hf-causal \
+        --model_args $MODEL_ARGS \
+        --tasks $TASK \
+        --num_fewshot "2,3,3,3" \
+        --device "cuda" \
+        --output_path "result.json"
+    ```
+
+4. Run! 
+   ```bash
+   sh harness.sh
+   ```
+
+We evaluated some open-sourced Japanese LMs. Pleasae refer to `harness.sh` inside `models` folder. 
 
 ## JP Metrics 
 - [JGLUE](https://github.com/yahoojapan/JGLUE)
@@ -19,30 +40,6 @@ pip install -e ".[ja]"
 - [JaQuAD](https://huggingface.co/datasets/SkelterLabsInc/JaQuAD)
 - LAMBADA (1k) translated by DeepL (experimental)
 
-## Examples
-- In the [Ricoh's paper](https://www.anlp.jp/proceedings/annual_meeting/2023/pdf_dir/H9-4.pdf), `jcommonsenseqa` is 3-shot setting (`--num_fewshot 3`) and `jsquad` is 2-shot setting (`--num_fewshot 2`).  
-- Also, please see `harness.sh` for slurm. 
-
-### Using HF checkpoints
-```
-MODEL_ARGS="pretrained=abeja/gpt-neox-japanese-2.7b,low_cpu_mem_usage=True"
-TASK="jsquad,jcommonsenseqa"
-python scripts/lm_harness_main.py \
-    --model hf-causal \
-    --model_args $MODEL_ARGS \
-    --tasks $TASK \
-    --num_fewshot "2,3" \
-    --device "cuda" 
-```
-
-### Using gpt-neox checkpoints
-```bash
-MODEL_CONFIG=/fsx/home-mkshing/code/jp-StableLM/gpt-neox/models/1b_test/global_step100/configs/stable-lm-jp-1b-experimental.yml
-python ./deepy.py evaluate.py \
-    -d configs $MODEL_CONFIG \
-    --eval_tasks jcommonsenseqa \
-    --eval_num_fewshot 3
-```
 
 -----------------
 # Language Model Evaluation Harness
