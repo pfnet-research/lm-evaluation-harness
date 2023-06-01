@@ -1,6 +1,19 @@
 
 # JP Language Model Evaluation Harness
 
+## Leaderboard
+
+| Model  | Average | [JCommonsenseQA](#jcommonsenseqa) (acc) | [JNLI](#jnli) (acc) | [MARC-ja](#marc-ja) (acc) | [JSQuAD](#jsquad) (exact_match) | eval script | Notes|
+| :--: | --: | --: | --: | --: | --: | :-- | :-- |
+| [rinna-japanese-gpt-neox-3.6b-instruction-sft](https://huggingface.co/rinna/japanese-gpt-neox-3.6b-instruction-sft) | 53.77 | 36.55 | 42.19 | 89.02 | 47.32 | [models/rinna-japanese-gpt-neox-3.6b-instruction-sft](https://github.com/Stability-AI/lm-evaluation-harness/tree/jp-stable/models/rinna-japanese-gpt-neox-3.6b-instruction-sft) |- Use v0.4 prompt template |
+| [cyberagent-open-calm-3b](https://huggingface.co/cyberagent/open-calm-3b) | 49 | 27.79 | 40.35 | 86.21 | 41.65 | [models/cyberagent-open-calm-3b](https://github.com/Stability-AI/lm-evaluation-harness/tree/jp-stable/models/cyberagent-open-calm-3b) | |
+| [rinna-japanese-gpt-neox-3.6b](https://huggingface.co/rinna/japanese-gpt-neox-3.6b) | 47.79 | 31.64 | 34.43 | 74.82 | 50.29 | [models/rinna-japanese-gpt-neox-3.6b](https://github.com/Stability-AI/lm-evaluation-harness/tree/jp-stable/models/rinna-japanese-gpt-neox-3.6b) | |
+| [rinna-japanese-gpt-1b](https://huggingface.co/rinna/japanese-gpt-1b) | 47.09 | 34.76 | 37.67 | 87.86 | 28.07 | [models/rinna-japanese-gpt-1b](https://github.com/Stability-AI/lm-evaluation-harness/tree/jp-stable/models/rinna-japanese-gpt-1b) | |
+| [cyberagent-open-calm-7b](https://huggingface.co/cyberagent/open-calm-7b) | 46.04 | 24.22 | 37.63 | 74.12 | 48.18 | [models/cyberagent-open-calm-7b](https://github.com/Stability-AI/lm-evaluation-harness/tree/jp-stable/models/cyberagent-open-calm-7b) | |
+| [cyberagent-open-calm-1b](https://huggingface.co/cyberagent/open-calm-1b) | 43.88 | 26.9 | 33.57 | 77.92 | 37.12 | [models/cyberagent-open-calm-1b](https://github.com/Stability-AI/lm-evaluation-harness/tree/jp-stable/models/cyberagent-open-calm-1b) | |
+| [abeja-gpt-neox-japanese-2.7b](https://huggingface.co/abeja/gpt-neox-japanese-2.7b) | 37.1 | 20.02 | 39.73 | 74.99 | 13.67 | [models/abeja-gpt-neox-japanese-2.7b](https://github.com/Stability-AI/lm-evaluation-harness/tree/jp-stable/models/abeja-gpt-neox-japanese-2.7b) | |
+
+
 ## How to evaluate your model
 
 1. git clone https://github.com/Stability-AI/lm-evaluation-harness/tree/jp-stable
@@ -32,14 +45,73 @@
 We evaluated some open-sourced Japanese LMs. Pleasae refer to `harness.sh` inside `models` folder. 
 
 ## JP Metrics 
-- [JGLUE](https://github.com/yahoojapan/JGLUE)
-  - JSQuAD
-  - JCommonsenseQA
-  - JNLI
-  - MARC-ja
-- [JaQuAD](https://huggingface.co/datasets/SkelterLabsInc/JaQuAD)
-- LAMBADA (1k) translated by DeepL (experimental)
+### [JGLUE](https://github.com/yahoojapan/JGLUE)
+#### JSQuAD
+> JSQuAD is a Japanese version of [SQuAD](https://rajpurkar.github.io/SQuAD-explorer/) (Rajpurkar+, 2016), one of the datasets of reading comprehension.
+Each instance in the dataset consists of a question regarding a given context (Wikipedia article) and its answer. JSQuAD is based on SQuAD 1.1 (there are no unanswerable questions). We used [the Japanese Wikipedia dump](https://dumps.wikimedia.org/jawiki/) as of 20211101.
 
+**sample script**
+```
+python main.py \
+    --model hf-causal \
+    --model_args $MODEL_ARGS \
+    --tasks "jsquad-1.1-0.2" \
+    --num_fewshot "2" \
+    --output_path "result.json"
+```
+
+#### JCommonsenseQA
+> JCommonsenseQA is a Japanese version of [CommonsenseQA](https://www.tau-nlp.org/commonsenseqa) (Talmor+, 2019), which is a multiple-choice question answering dataset that requires commonsense reasoning ability. It is built using crowdsourcing with seeds extracted from the knowledge base [ConceptNet](https://conceptnet.io/).
+
+**sample script**
+```
+python main.py \
+    --model hf-causal \
+    --model_args $MODEL_ARGS \
+    --tasks "jcommonsenseqa-1.1-0.2" \
+    --num_fewshot "3" \
+    --output_path "result.json"
+```
+
+#### JNLI
+> JNLI is a Japanese version of the NLI (Natural Language Inference) dataset. NLI is a task to recognize the inference relation that a premise sentence has to a hypothesis sentence. The inference relations are `entailment`, `contradiction`, and `neutral`.
+
+**sample script**
+```
+python main.py \
+    --model hf-causal \
+    --model_args $MODEL_ARGS \
+    --tasks "jnli-1.1-0.2" \
+    --num_fewshot "3" \
+    --output_path "result.json"
+```
+
+#### MARC-ja
+> MARC-ja is a dataset of the text classification task. This dataset is based on the Japanese portion of [Multilingual Amazon Reviews Corpus (MARC)](https://docs.opendata.aws/amazon-reviews-ml/readme.html) (Keung+, 2020).
+
+**sample script**
+```
+python main.py \
+    --model hf-causal \
+    --model_args $MODEL_ARGS \
+    --tasks "marc_ja-1.1-0.2" \
+    --num_fewshot "3" \
+    --output_path "result.json"
+```
+
+### [JaQuAD](https://huggingface.co/datasets/SkelterLabsInc/JaQuAD)
+
+> Japanese Question Answering Dataset (JaQuAD), released in 2022, is a human-annotated dataset created for Japanese Machine Reading Comprehension. JaQuAD is developed to provide a SQuAD-like QA dataset in Japanese. 
+
+**sample script**
+```
+python main.py \
+    --model hf-causal \
+    --model_args $MODEL_ARGS \
+    --tasks "jaquad-1.1-0.2" \
+    --num_fewshot "2" \
+    --output_path "result.json"
+```
 
 -----------------
 # Language Model Evaluation Harness
