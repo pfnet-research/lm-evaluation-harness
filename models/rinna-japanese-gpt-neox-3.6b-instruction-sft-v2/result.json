@@ -1,0 +1,48 @@
+{
+  "results": {
+    "jcommonsenseqa-1.1-0.4": {
+      "acc": 0.38427167113494193,
+      "acc_stderr": 0.014547650219928198,
+      "acc_norm": 0.37890974084003576,
+      "acc_norm_stderr": 0.014508561075692419
+    },
+    "jnli-1.1-0.4": {
+      "acc": 0.5336894001643385,
+      "acc_stderr": 0.010113718882021935,
+      "acc_norm": 0.5123253903040262,
+      "acc_norm_stderr": 0.01013367467477837
+    },
+    "marc_ja-1.1-0.4": {
+      "acc": 0.8947647683056243,
+      "acc_stderr": 0.004081271868486172,
+      "acc_norm": 0.8947647683056243,
+      "acc_norm_stderr": 0.004081271868486172
+    },
+    "jsquad-1.1-0.4": {
+      "exact_match": 45.31742458352094,
+      "f1": 59.7296045907487
+    }
+  },
+  "versions": {
+    "jcommonsenseqa-1.1-0.4": 1.1,
+    "jnli-1.1-0.4": 1.1,
+    "jsquad-1.1-0.4": 1.1,
+    "marc_ja-1.1-0.4": 1.1
+  },
+  "config": {
+    "model": "hf-causal",
+    "model_args": "pretrained=rinna/japanese-gpt-neox-3.6b-instruction-sft-v2,use_fast=False",
+    "num_fewshot": [
+      2,
+      3,
+      3,
+      3
+    ],
+    "batch_size": null,
+    "device": "cuda",
+    "no_cache": false,
+    "limit": null,
+    "bootstrap_iters": 100000,
+    "description_dict": {}
+  }
+}
