@@ -57,6 +57,7 @@ from . import jaquad
 from . import jcommonsenseqa
 from . import jnli
 from . import marc_ja
+from . import jblimp
 
 
 ########################################
@@ -327,6 +328,7 @@ TASK_REGISTRY = {
     **jnli.construct_tasks(),
     "marc_ja": marc_ja.MARCJaWithFintanPrompt,
     **marc_ja.construct_tasks(),
+    "jblimp": jblimp.JBlimp,
 }
 
 

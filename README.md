@@ -115,6 +115,22 @@ python main.py \
     --output_path "result.json"
 ```
 
+### [JBLiMP](https://github.com/osekilab/JBLiMP)
+
+> JBLiMP is a novel dataset for targeted syntactic evaluations of language models in Japanese. JBLiMP consists of 331 minimal pairs, which are created based on acceptability judgments extracted from journal articles in theoretical linguistics. These minimal pairs are grouped into 11 categories, each covering a different linguistic phenomenon.
+
+**NOTE:** JBLiMP is not used in official evaluations because it is too small compared to other datasets.
+
+**sample script**
+```
+python main.py \
+    --model hf-causal \
+    --model_args $MODEL_ARGS \
+    --tasks "jblimp" \
+    --num_fewshot "0" \
+    --output_path "result.json"
+```
+
 -----------------
 # Language Model Evaluation Harness
 
