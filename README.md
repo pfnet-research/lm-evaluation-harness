@@ -15,7 +15,7 @@
 | [cyberagent-open-calm-1b](https://huggingface.co/cyberagent/open-calm-1b) | 43.88 | 26.9 | 33.57 | 77.92 | 37.12 | [models/cyberagent-open-calm-1b](https://github.com/Stability-AI/lm-evaluation-harness/tree/jp-stable/models/cyberagent-open-calm-1b) | |
 | [abeja-gpt-neox-japanese-2.7b](https://huggingface.co/abeja/gpt-neox-japanese-2.7b) | 37.1 | 20.02 | 39.73 | 74.99 | 13.67 | [models/abeja-gpt-neox-japanese-2.7b](https://github.com/Stability-AI/lm-evaluation-harness/tree/jp-stable/models/abeja-gpt-neox-japanese-2.7b) | |
 | [cyberagent-open-calm-large](https://huggingface.co/cyberagent/open-calm-large) | None | None | None | None | None  | [models/cyberagent-open-calm-large](https://github.com/Stability-AI/lm-evaluation-harness/tree/jp-stable/models/cyberagent-open-calm-large) | use_fast=True |
-| [cyberagent-open-calm-medium](https://huggingface.co/cyberagent/open-calm-medium) | None | None | None | None | None  | [models/cyberagent-open-calm-medium](https://github.com/Stability-AI/lm-evaluation-harness/tree/jp-stable/models/cyberagent-open-calm-medium) | use_fast=True |
+| [cyberagent-open-calm-medium](https://huggingface.co/cyberagent/open-calm-medium) | None | 39.50 | 42.32 | 83.57 | 28.73  | [models/cyberagent-open-calm-medium](https://github.com/Stability-AI/lm-evaluation-harness/tree/jp-stable/models/cyberagent-open-calm-medium) | use_fast=True |
 
 
 
