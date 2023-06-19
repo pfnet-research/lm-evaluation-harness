@@ -52,14 +52,12 @@ from . import gsm8k
 from . import storycloze
 from . import toxigen
 from . import crowspairs
-from . import jsquad
-from . import jaquad
-from . import jcommonsenseqa
-from . import jnli
-from . import marc_ja
-from . import jblimp
-
-
+from .ja import jsquad
+from .ja import jaquad
+from .ja import jcommonsenseqa
+from .ja import jnli
+from .ja import marc_ja
+from .ja import jblimp
 ########################################
 # Translation tasks
 ########################################
