@@ -16,6 +16,7 @@
 | [abeja-gpt-neox-japanese-2.7b](https://huggingface.co/abeja/gpt-neox-japanese-2.7b) | 37.1 | 20.02 | 39.73 | 74.99 | 13.67 | [models/abeja-gpt-neox-japanese-2.7b](https://github.com/Stability-AI/lm-evaluation-harness/tree/jp-stable/models/abeja-gpt-neox-japanese-2.7b) | |
 
 
+
 ## How to evaluate your model
 
 1. git clone https://github.com/Stability-AI/lm-evaluation-harness/tree/jp-stable
