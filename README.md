@@ -5,16 +5,14 @@
 
 | Model  | Average | [JCommonsenseQA](#jcommonsenseqa) (acc) | [JNLI](#jnli) (acc) | [MARC-ja](#marc-ja) (acc) | [JSQuAD](#jsquad) (exact_match) | eval script | Notes|
 | :--: | --: | --: | --: | --: | --: | :-- | :-- |
-| [rinna-japanese-gpt-neox-3.6b-instruction-ppo](https://huggingface.co/rinna/japanese-gpt-neox-3.6b-instruction-ppo) | 59.63 | 41.38 | 54.03 | 89.71 | 53.42 | [models/rinna-japanese-gpt-neox-3.6b-instruction-ppo](https://github.com/Stability-AI/lm-evaluation-harness/tree/jp-stable/models/rinna-japanese-gpt-neox-3.6b-instruction-ppo) |- Use v0.4 prompt template |
-| [rinna-japanese-gpt-neox-3.6b-instruction-sft-v2](https://huggingface.co/rinna/japanese-gpt-neox-3.6b-instruction-sft-v2) | 56.65 | 38.43 | 53.37 | 89.48 | 45.32 | [models/rinna-japanese-gpt-neox-3.6b-instruction-sft-v2](https://github.com/Stability-AI/lm-evaluation-harness/tree/jp-stable/models/rinna-japanese-gpt-neox-3.6b-instruction-sft-v2) |- Use v0.4 prompt template|
-| [rinna-japanese-gpt-neox-3.6b-instruction-sft](https://huggingface.co/rinna/japanese-gpt-neox-3.6b-instruction-sft) | 53.77 | 36.55 | 42.19 | 89.02 | 47.32 | [models/rinna-japanese-gpt-neox-3.6b-instruction-sft](https://github.com/Stability-AI/lm-evaluation-harness/tree/jp-stable/models/rinna-japanese-gpt-neox-3.6b-instruction-sft) |- Use v0.4 prompt template |
-| [cyberagent-open-calm-3b](https://huggingface.co/cyberagent/open-calm-3b) | 49 | 27.79 | 40.35 | 86.21 | 41.65 | [models/cyberagent-open-calm-3b](https://github.com/Stability-AI/lm-evaluation-harness/tree/jp-stable/models/cyberagent-open-calm-3b) | |
-| [cyberagent-open-calm-medium](https://huggingface.co/cyberagent/open-calm-medium) | 48.53 | 39.50 | 42.32 | 83.57 | 28.73  | [models/cyberagent-open-calm-medium](https://github.com/Stability-AI/lm-evaluation-harness/tree/jp-stable/models/cyberagent-open-calm-medium) | use_fast=True |
-| [rinna-japanese-gpt-neox-3.6b](https://huggingface.co/rinna/japanese-gpt-neox-3.6b) | 47.79 | 31.64 | 34.43 | 74.82 | 50.29 | [models/rinna-japanese-gpt-neox-3.6b](https://github.com/Stability-AI/lm-evaluation-harness/tree/jp-stable/models/rinna-japanese-gpt-neox-3.6b) | |
-| [rinna-japanese-gpt-1b](https://huggingface.co/rinna/japanese-gpt-1b) | 47.09 | 34.76 | 37.67 | 87.86 | 28.07 | [models/rinna-japanese-gpt-1b](https://github.com/Stability-AI/lm-evaluation-harness/tree/jp-stable/models/rinna-japanese-gpt-1b) | |
-| [cyberagent-open-calm-large](https://huggingface.co/cyberagent/open-calm-large) | 46.78 | 29.94 | 40.84 | 79.12 | 37.24 | [models/cyberagent-open-calm-large](https://github.com/Stability-AI/lm-evaluation-harness/tree/jp-stable/models/cyberagent-open-calm-large) | use_fast=True |
-| [cyberagent-open-calm-7b](https://huggingface.co/cyberagent/open-calm-7b) | 46.04 | 24.22 | 37.63 | 74.12 | 48.18 | [models/cyberagent-open-calm-7b](https://github.com/Stability-AI/lm-evaluation-harness/tree/jp-stable/models/cyberagent-open-calm-7b) | |
-| [cyberagent-open-calm-1b](https://huggingface.co/cyberagent/open-calm-1b) | 43.88 | 26.9 | 33.57 | 77.92 | 37.12 | [models/cyberagent-open-calm-1b](https://github.com/Stability-AI/lm-evaluation-harness/tree/jp-stable/models/cyberagent-open-calm-1b) | |
+| [rinna-japanese-gpt-neox-3.6b-instruction-ppo](https://huggingface.co/rinna/japanese-gpt-neox-3.6b-instruction-ppo) | 59.63 | 41.38 | 54.03 | 89.71 | 53.42 | [models/rinna/rinna-japanese-gpt-neox-3.6b-instruction-ppo](https://github.com/Stability-AI/lm-evaluation-harness/tree/jp-stable/models/rinna/rinna-japanese-gpt-neox-3.6b-instruction-ppo) |- Use v0.4 prompt template |
+| [rinna-japanese-gpt-neox-3.6b-instruction-sft-v2](https://huggingface.co/rinna/japanese-gpt-neox-3.6b-instruction-sft-v2) | 56.65 | 38.43 | 53.37 | 89.48 | 45.32 | [models/rinna/rinna-japanese-gpt-neox-3.6b-instruction-sft-v2](https://github.com/Stability-AI/lm-evaluation-harness/tree/jp-stable/models/rinna/rinna-japanese-gpt-neox-3.6b-instruction-sft-v2) |- Use v0.4 prompt template|
+| [rinna-japanese-gpt-neox-3.6b-instruction-sft](https://huggingface.co/rinna/japanese-gpt-neox-3.6b-instruction-sft) | 53.77 | 36.55 | 42.19 | 89.02 | 47.32 | [models/rinna/rinna-japanese-gpt-neox-3.6b-instruction-sft](https://github.com/Stability-AI/lm-evaluation-harness/tree/jp-stable/models/rinna/rinna-japanese-gpt-neox-3.6b-instruction-sft) |- Use v0.4 prompt template |
+| [cyberagent-open-calm-3b](https://huggingface.co/cyberagent/open-calm-3b) | 49 | 27.79 | 40.35 | 86.21 | 41.65 | [models/cyberagent/cyberagent-open-calm-3b](https://github.com/Stability-AI/lm-evaluation-harness/tree/jp-stable/models/cyberagent/cyberagent-open-calm-3b) | |
+| [rinna-japanese-gpt-neox-3.6b](https://huggingface.co/rinna/japanese-gpt-neox-3.6b) | 47.79 | 31.64 | 34.43 | 74.82 | 50.29 | [models/rinna/rinna-japanese-gpt-neox-3.6b](https://github.com/Stability-AI/lm-evaluation-harness/tree/jp-stable/models/rinna/rinna-japanese-gpt-neox-3.6b) | |
+| [rinna-japanese-gpt-1b](https://huggingface.co/rinna/japanese-gpt-1b) | 47.09 | 34.76 | 37.67 | 87.86 | 28.07 | [models/rinna/rinna-japanese-gpt-1b](https://github.com/Stability-AI/lm-evaluation-harness/tree/jp-stable/models/rinna/rinna-japanese-gpt-1b) | |
+| [cyberagent-open-calm-7b](https://huggingface.co/cyberagent/open-calm-7b) | 46.04 | 24.22 | 37.63 | 74.12 | 48.18 | [models/cyberagent/cyberagent-open-calm-7b](https://github.com/Stability-AI/lm-evaluation-harness/tree/jp-stable/models/cyberagent/cyberagent-open-calm-7b) | |
+| [cyberagent-open-calm-1b](https://huggingface.co/cyberagent/open-calm-1b) | 43.88 | 26.9 | 33.57 | 77.92 | 37.12 | [models/cyberagent/cyberagent-open-calm-1b](https://github.com/Stability-AI/lm-evaluation-harness/tree/jp-stable/models/cyberagent/cyberagent-open-calm-1b) | |
 | [abeja-gpt-neox-japanese-2.7b](https://huggingface.co/abeja/gpt-neox-japanese-2.7b) | 37.1 | 20.02 | 39.73 | 74.99 | 13.67 | [models/abeja-gpt-neox-japanese-2.7b](https://github.com/Stability-AI/lm-evaluation-harness/tree/jp-stable/models/abeja-gpt-neox-japanese-2.7b) | |
 
 
@@ -115,6 +113,22 @@ python main.py \
     --model_args $MODEL_ARGS \
     --tasks "jaquad-1.1-0.2" \
     --num_fewshot "2" \
+    --output_path "result.json"
+```
+
+### [JBLiMP](https://github.com/osekilab/JBLiMP)
+
+> JBLiMP is a novel dataset for targeted syntactic evaluations of language models in Japanese. JBLiMP consists of 331 minimal pairs, which are created based on acceptability judgments extracted from journal articles in theoretical linguistics. These minimal pairs are grouped into 11 categories, each covering a different linguistic phenomenon.
+
+**NOTE:** JBLiMP is not used in official evaluations because it is too small compared to other datasets.
+
+**sample script**
+```
+python main.py \
+    --model hf-causal \
+    --model_args $MODEL_ARGS \
+    --tasks "jblimp" \
+    --num_fewshot "0" \
     --output_path "result.json"
 ```
 
