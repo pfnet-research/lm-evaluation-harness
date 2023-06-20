@@ -8,6 +8,8 @@ XL-Sum is highly abstractive, concise, and of high quality, as indicated by huma
 
 Homepage: https://github.com/csebuetnlp/xl-sum
 """
+import os
+import inspect
 from rouge_score import rouge_scorer, scoring
 from lm_eval.base import rf, Task
 
@@ -35,6 +37,9 @@ _CITATION = """
 """
 
 
+DYNAMIC_MAX_LENGTH = os.getenv("DYNAMIC_MAX_LENGTH", "true").lower()
+
+
 class XLSumJa(Task):
     """ 
     - Use ROUGE-2 as [PaLM 2](https://ai.google/static/documents/palm2techreport.pdf)
@@ -46,6 +51,7 @@ class XLSumJa(Task):
     DATASET_PATH = "mkshing/xlsum_ja"
     DATASET_NAME = None
     DESCRIPTION = "与えられたニュース記事を要約してください。\n\n"
+    LOAD_TOKENIZER = True
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -76,9 +82,46 @@ class XLSumJa(Task):
     def doc_to_target(self, doc):
         return doc["summary"]
 
+    def preprocess_ctx(self, ctx, max_length):
+        if len(self._tokenize(ctx)) <= max_length:
+            return ctx
+        # if the inputs too long, truncate inputs 
+        ctxs = [f"ニュース記事:{c}"for c in ctx.split("ニュース記事:")]
+        description = ""
+        if "要約:" not in ctxs[0]:
+            description = ctxs[0]
+            ctxs = ctxs[1:]
+        max_length_per_shot = max_length // len(ctxs)
+        res = description
+        for c in ctxs:
+            text, summary = c.split("要約:")
+            sentences = text.split("。")
+            c_res = ""
+            for s in sentences:
+                if len(self._tokenize(text=c_res+s)) > max_length_per_shot:
+                    c_res += "\n"
+                    break
+                c_res += s + "。"
+            res += f"{c_res}要約:{summary}"
+        return res
+    
+    def _tokenize(self, text, **kwargs):
+        encode_fn = self.tokenizer.encode
+        if "add_special_tokens" in inspect.getfullargspec(encode_fn).args:
+            encode_params = dict(add_special_tokens=False)
+        else:
+            encode_params = {}
+        return encode_fn(text, **encode_params, **kwargs)
+
     def construct_requests(self, doc, ctx):
-        completion = rf.greedy_until(ctx, ["\n"])
-        return completion
+        if DYNAMIC_MAX_LENGTH == "false" or not hasattr(self.tokenizer, "encode"):
+            max_num_tokens = self.max_gen_toks
+        else:
+            # length + some buffers (10)
+            max_num_tokens = len(self._tokenize(doc["summary"])) + 10
+        ctx = self.preprocess_ctx(ctx, max_length=self.max_length-max_num_tokens)
+        continuation = rf.greedy_until(ctx, ["\n"], max_num_tokens)
+        return continuation
 
     def process_results(self, doc, results):
         continuation = results[0]
