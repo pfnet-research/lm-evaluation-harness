@@ -84,3 +84,17 @@ python main.py \
     --num_fewshot "0" \
     --output_path "result.json"
 ```
+
+## [Wikilingua](https://github.com/esdurmus/Wikilingua)
+
+Wikilingua is a summarization task using documents constructed from Wikihow articles. While the original dataset is multilingual, for now it just the Japanese version has been added.
+
+**sample script**
+```
+python main.py \
+    --model hf-causal \
+    --model_args $MODEL_ARGS \
+    --tasks "wikilingua_ja" \
+    --num_fewshot "1" \
+    --output_path "result.json"
+```
