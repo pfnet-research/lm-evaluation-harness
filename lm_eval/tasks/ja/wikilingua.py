@@ -7,11 +7,10 @@ We introduce WikiLingua, a large-scale, multilingual dataset for the evaluation 
 Homepage: https://github.com/esdurmus/Wikilingua
 """
 import numpy as np
-import sacrebleu
 import datasets
-from rouge_score import rouge_scorer, scoring
 from lm_eval.base import rf, Task
 from lm_eval.metrics import mean
+from lm_eval.utils import bleu, rouge
 
 
 
@@ -90,8 +89,8 @@ class Wikilingua(Task):
         completion = results[0].strip()
 
         ref = doc["source"]
-        bleu_score = self.bleu([[ref]], [completion])
-        rouge_scores = self.rouge([ref], [completion])
+        bleu_score = bleu([[ref]], [completion])
+        rouge_scores = rouge([ref], [completion])
 
 
         return {
@@ -116,54 +115,3 @@ class Wikilingua(Task):
             "rouge2": True,
             "rougeL": True,
         }
-
-    #TODO move to utils
-    def bleu(self, refs, preds):
-        """
-        Returns `t5` style BLEU scores. See the related implementation:
-        https://github.com/google-research/text-to-text-transfer-transformer/blob/3d10afd51ba97ac29eb66ae701eca274488202f7/t5/evaluation/metrics.py#L41
-
-        :param refs:
-            A `list` of `list` of reference `str`s.
-        :param preds:
-            A `list` of predicted `str`s.
-        """
-        score = sacrebleu.corpus_bleu(
-            preds,
-            refs,
-            smooth_method="exp",
-            smooth_value=0.0,
-            force=False,
-            lowercase=False,
-            tokenize="intl",
-            use_effective_order=False,
-        ).score
-        return score
-
-    #TODO move to utils
-    def rouge(self, refs, preds):
-        """
-        Returns `t5` style ROUGE scores. See the related implementation:
-        https://github.com/google-research/text-to-text-transfer-transformer/blob/3d10afd51ba97ac29eb66ae701eca274488202f7/t5/evaluation/metrics.py#L68
-
-        :param refs:
-            A `list` of reference `strs`.
-        :param preds:
-            A `list` of predicted `strs`.
-        """
-        rouge_types = ["rouge1", "rouge2", "rougeLsum"]
-        scorer = rouge_scorer.RougeScorer(rouge_types)
-        # Add newlines between sentences to correctly compute `rougeLsum`.
-
-        def _prepare_summary(summary):
-            summary = summary.replace(" . ", ".\n")
-            return summary
-
-        # Accumulate confidence intervals.
-        aggregator = scoring.BootstrapAggregator()
-        for ref, pred in zip(refs, preds):
-            ref = _prepare_summary(ref)
-            pred = _prepare_summary(pred)
-            aggregator.add_scores(scorer.score(ref, pred))
-        result = aggregator.aggregate()
-        return {type: result[type].mid.fmeasure * 100 for type in rouge_types}
