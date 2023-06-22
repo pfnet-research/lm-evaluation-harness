@@ -45,7 +45,7 @@ class XLSumJa(Task):
     - Use ROUGE-2 as [PaLM 2](https://ai.google/static/documents/palm2techreport.pdf)
     - Use Mecab tokenizer for Japanese eval 
     """
-    VERSION = 0
+    VERSION = 1.0
     # this prompt was made by mkshing
     PROMPT_VERSION = 0.0
     DATASET_PATH = "mkshing/xlsum_ja"
@@ -59,7 +59,7 @@ class XLSumJa(Task):
         self.tokenizer = MecabTokenizer()
 
     def has_training_docs(self):
-        return False
+        return True
 
     def has_validation_docs(self):
         return True
@@ -82,19 +82,20 @@ class XLSumJa(Task):
     def doc_to_target(self, doc):
         return doc["summary"]
 
-    def preprocess_ctx(self, ctx, max_length):
+    def preprocess_ctx(self, ctx, max_length, ctx_prompt="ニュース記事:", summary_prompt="要約:"):
         if len(self._tokenize(ctx)) <= max_length:
             return ctx
         # if the inputs too long, truncate inputs 
-        ctxs = [f"ニュース記事:{c}"for c in ctx.split("ニュース記事:")]
+        ctxs = [f"{ctx_prompt}{c}"for c in ctx.split(ctx_prompt)]
         description = ""
-        if "要約:" not in ctxs[0]:
+        if summary_prompt not in ctxs[0]:
             description = ctxs[0]
             ctxs = ctxs[1:]
         max_length_per_shot = max_length // len(ctxs)
         res = description
         for c in ctxs:
-            text, summary = c.split("要約:")
+            print(c)
+            text, summary = c.split(summary_prompt)
             sentences = text.split("。")
             c_res = ""
             for s in sentences:
@@ -102,7 +103,7 @@ class XLSumJa(Task):
                     c_res += "\n"
                     break
                 c_res += s + "。"
-            res += f"{c_res}要約:{summary}"
+            res += f"{c_res}{summary_prompt}{summary}"
         return res
     
     def _tokenize(self, text, **kwargs):
@@ -195,7 +196,10 @@ class XLSumJaWithRinnaInstructionSFT(XLSumJa):
         input_text = f"ニュース記事:{doc['text']}"
         return f"<NL>ユーザー: {input_text}<NL>システム: "
 
-
+    def preprocess_ctx(self, ctx, max_length):
+        return super().preprocess_ctx(ctx, max_length, ctx_prompt="<NL>ユーザー: ", summary_prompt="<NL>システム: ")
+    
+    
 VERSIONS = [
     XLSumJa,
     XLSumJaWithJAAlpacaPrompt,
