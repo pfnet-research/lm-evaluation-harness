@@ -20,16 +20,14 @@ _CITATION = """
 """
 
 
-# The default preset prompt for all models.
-PROMPT = """
-与えられた文章を要約して下さい。
-"""
-
 # TODO make a summarization task
 class Wikilingua(Task):
     VERSION = 1
+    # custom prompt
+    PROMPT_VERSION = 0.0
     DATASET_PATH = "GEM/wiki_lingua"
     DATASET_NAME = "ja"
+    DESCRIPTION = "与えられた文章を要約して下さい。\n\n"
 
     def __init__(self):
         super().__init__()
@@ -53,7 +51,7 @@ class Wikilingua(Task):
         return self.dataset["train"]
 
     def doc_to_text(self, doc):
-        return PROMPT + "\n\n" + doc["source"]
+        return doc["source"]
 
     def doc_to_target(self, doc):
         target = doc["target"]
@@ -64,13 +62,6 @@ class Wikilingua(Task):
 
         #target = doc["target"].replace(" \u3000", "\u3000").replace("\u3000 ", "。")
         return target
-
-    def fewshot_context(
-        self, doc, num_fewshot, provide_description=None, rnd=None, description=None
-    ):
-        return super().fewshot_context(
-            doc=doc, num_fewshot=num_fewshot, rnd=rnd, description=description
-        )
 
     def construct_requests(self, doc, ctx):
         """Uses RequestFactory to construct Requests and returns an iterable of
@@ -83,7 +74,6 @@ class Wikilingua(Task):
             language description, as well as the few shot examples, and the question
             part of the document for `doc`.
         """
-        #TODO is this the right thing?
         completion = rf.greedy_until(ctx, ["\n"])
         return completion
 
