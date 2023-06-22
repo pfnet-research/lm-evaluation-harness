@@ -7,7 +7,7 @@ class MecabTokenizer:
         self.tagger = Tagger('-Owakati')
 
     def normalize_answer(self, text):
-        """Lower text and remove punctuation, articles and extra whitespace."""
+        """Lower case text, remove punctuation and extra whitespace, etc."""
         import emoji
         import neologdn
 
