@@ -28,7 +28,11 @@ class MecabTokenizer:
             )
             return emoji_pattern.sub(r"", text)
         
-        return white_space_fix((neologdn.normalize(remove_emoji(text))))
+        text = remove_emoji(text)
+        # see neologdn docs for details, but handles things like full/half width variation
+        text = neologdn.normalize(text)
+        text = white_space_fix(text)
+        return text
 
     def tokenize(self, text):
         return self.tagger.parse(self.normalize_answer(text)).split()
