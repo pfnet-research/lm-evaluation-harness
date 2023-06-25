@@ -17,7 +17,7 @@ python main.py \
 
 ## `0.1`
 - **Reference:** [日本語に特化した60億パラメータ規模のGPTモデルの構築と評価](https://www.anlp.jp/proceedings/annual_meeting/2023/pdf_dir/H9-4.pdf)
-- **Supported Tasks:** `jsquad`, `jaquad`, `jcommonsenseqa`
+- **Supported Tasks:** `jsquad`, `jaquad`, `jcommonsenseqa`, `jaqket_v2`
 - **Format:**
   e.g. JCommonsenseQA
   ```
@@ -31,7 +31,7 @@ python main.py \
 
 ## `0.2`
 - **Reference:** [ChatGPT vs BERT: どちらが日本語をより理解できるのか?](https://fintan.jp/page/9126/)
-- **Supported Tasks:** `jsquad`, `jaquad`, `jcommonsenseqa`, `jnli`, `marc_ja`
+- **Supported Tasks:** `jsquad`, `jaquad`, `jcommonsenseqa`, `jnli`, `marc_ja`, `jaqket_v2`
 - **Format:**
   e.g. JCommonsenseQA
   ```
@@ -52,7 +52,7 @@ This is intended to use for instruction-tuned models trained on [Japanese Alpaca
 japanese-alpaca-lora
 ](https://github.com/masa3141/japanese-alpaca-lora)
   - https://github.com/Stability-AI/gpt-neox/blob/bed0b5aa66142aa649299b76d4e3948efccd0bf4/finetune/templates.py
-- **Supported Tasks:** `jsquad`, `jaquad`, `jcommonsenseqa`, `jnli`, `marc_ja`
+- **Supported Tasks:** `jsquad`, `jaquad`, `jcommonsenseqa`, `jnli`, `marc_ja`, `jaqket_v2`
 - **Format:**
   e.g. JCommonsenseQA
   ```
@@ -81,7 +81,7 @@ This is intended to use for [rinna/japanese-gpt-neox-3.6b-instruction-sft](https
 
 
 - **Reference:** [rinna/japanese-gpt-neox-3.6b-instruction-sft](https://huggingface.co/rinna/japanese-gpt-neox-3.6b-instruction-sft)
-- **Supported Tasks:** `jsquad`, `jaquad`, `jcommonsenseqa`, `jnli`, `marc_ja`
+- **Supported Tasks:** `jsquad`, `jaquad`, `jcommonsenseqa`, `jnli`, `marc_ja`, `jaqket_v2`
 - **Format:**
   e.g. JCommonsenseQA
   ```

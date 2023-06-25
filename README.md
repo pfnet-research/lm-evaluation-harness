@@ -59,6 +59,7 @@ For more details, please see [docs/jptasks.md](https://github.com/Stability-AI/l
 | [MARC-ja](#marc-ja) | 0.2 / 0.3 / 0.4 |
 | [JaQuAD](#jaquad) | 0.1 / 0.2 / 0.3 / 0.4 |
 | [JBLiMP](#jblimp) | - |
+| [JAQKET] | 0.1 / 0.2 / 0.3 / 0.4 |
 
 -----------------
 # Language Model Evaluation Harness
