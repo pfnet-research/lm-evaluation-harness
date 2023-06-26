@@ -39,11 +39,11 @@ class JAQKETV2(Task):
     SEP = "\n"
     REMOVE_IDS = []
     TOP_K_LIMIT = _TOP_K_LIMIT
-    JASQUAD_METRIC: datasets.Metric = datasets.load_metric(jasquad.__file__)
    
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+        self.jasqaud_metric = datasets.load_metric(jasquad.__file__)
 
     def has_training_docs(self):
         return True
@@ -148,8 +148,7 @@ class JAQKETV2(Task):
         }
 
     def _squad_metric(self, predictions, references):
-        squad_metric = self.JASQUAD_METRIC
-        return squad_metric.compute(predictions=predictions, references=references)
+        return self.jasqaud_metric.compute(predictions=predictions, references=references)
 
 
     def _squad_agg(self, key, item):
