@@ -23,7 +23,7 @@ _CITATION = """
   note= "in Japanese"
 """
 
-_TOP_K_RETRIEVER = 10
+_TOP_K_LIMIT = 10
 DYNAMIC_MAX_LENGTH = os.getenv("DYNAMIC_MAX_LENGTH", "true").lower()
 
 class JAQKETV2(Task):
@@ -38,7 +38,7 @@ class JAQKETV2(Task):
     DESCRIPTION = "[題名]と[問題]から[質問]に対する[答え]を抜き出しなさい\n\n"
     SEP = "\n"
     REMOVE_IDS = []
-    TOP_K_RETRIEVER = _TOP_K_RETRIEVER
+    TOP_K_LIMIT = _TOP_K_LIMIT
     JASQUAD_METRIC: datasets.Metric = datasets.load_metric(jasquad.__file__)
    
 
@@ -64,8 +64,8 @@ class JAQKETV2(Task):
         return dataset
     
     def doc_to_text(self, doc):
-        topk_titles = doc["ctxs"]["title"][:self.TOP_K_RETRIEVER]
-        topk_contexts = doc["ctxs"]["text"][:self.TOP_K_RETRIEVER]
+        topk_titles = doc["ctxs"]["title"][:self.TOP_K_LIMIT]
+        topk_contexts = doc["ctxs"]["text"][:self.TOP_K_LIMIT]
         text = f"{self.SEP}".join([
             "[題名]:"
             + title
@@ -163,9 +163,9 @@ class JAQKETV2WithFintanPrompt(JAQKETV2):
     PROMPT_VERSION = 0.2
     DESCRIPTION = "質問に対する回答を文章から一言で抽出してください。回答は名詞で答えてください。\n\n"
     SEP = "\n"
-    TOP_K_RETRIEVER = _TOP_K_RETRIEVER
+    TOP_K_LIMIT = _TOP_K_LIMIT
     def doc_to_text(self, doc):
-        text = f"{self.SEP}".join([ctx for ctx in doc["ctxs"]["text"][:self.TOP_K_RETRIEVER]])
+        text = f"{self.SEP}".join([ctx for ctx in doc["ctxs"]["text"][:self.TOP_K_LIMIT]])
         return (
             "文章:"
             + text
@@ -195,7 +195,7 @@ class JAQKETV2WithJAAlpacaPrompt(JAQKETV2):
     DESCRIPTION = "以下は、タスクを説明する指示と、文脈のある入力の組み合わせです。要求を適切に満たす応答を書きなさい。\n\n\n"
     INSTRUCTION = "与えられた文脈から、質問に対する答えを抜き出してください。\n\n"
     # SEP = ""
-    TOP_K_RETRIEVER = _TOP_K_RETRIEVER
+    TOP_K_LIMIT = _TOP_K_LIMIT
     def doc_to_text(self, doc):
         """
         以下は、タスクを説明する指示と、文脈のある入力の組み合わせです。要求を適切に満たす応答を書きなさい。
@@ -209,7 +209,7 @@ class JAQKETV2WithJAAlpacaPrompt(JAQKETV2):
         ### 応答: 
         {response}
         """
-        text = "".join([ctx for ctx in doc["ctxs"]["text"][:self.TOP_K_RETRIEVER]])
+        text = "".join([ctx for ctx in doc["ctxs"]["text"][:self.TOP_K_LIMIT]])
         input_text = f"文脈：{text}\n質問：{doc['question']}"
         return f"### 指示:\n{self.INSTRUCTION}\n\n### 入力:\n{input_text}\n\n### 応答:\n"
 
@@ -222,9 +222,9 @@ class JAQKETV2WithRinnaInstructionSFT(JAQKETV2):
     PROMPT_VERSION = 0.4
     DESCRIPTION = "ユーザー: 与えられた文脈から、質問に対する答えを抜き出してください。<NL>システム: 分かりました。"
     # SEP = ""
-    TOP_K_RETRIEVER = _TOP_K_RETRIEVER
+    TOP_K_LIMIT = _TOP_K_LIMIT
     def doc_to_text(self, doc):
-        text = "".join([ctx for ctx in doc["ctxs"]["text"][:self.TOP_K_RETRIEVER]])
+        text = "".join([ctx for ctx in doc["ctxs"]["text"][:self.TOP_K_LIMIT]])
         input_text = f"文脈：{text}<NL>質問：{doc['question']}"
         return f"<NL>ユーザー: {input_text}<NL>システム: "
 
