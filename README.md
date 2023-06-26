@@ -53,13 +53,13 @@ For more details, please see [docs/jptasks.md](https://github.com/Stability-AI/l
 
 | Tasks | [Supported Prompt Templates](https://github.com/Stability-AI/lm-evaluation-harness/blob/jp-stable/docs/prompt_templates.md) |
 | :- | -: | 
-| [JSQuAD](#jsquad) | 0.1 / 0.2 / 0.3 / 0.4 |
-| [JCommonsenseQA](#jcommonsenseqa) |  0.1 / 0.2 / 0.3 / 0.4 |
-| [JNLI](#jnli) | 0.2 / 0.3 / 0.4 |
-| [MARC-ja](#marc-ja) | 0.2 / 0.3 / 0.4 |
-| [JaQuAD](#jaquad) | 0.1 / 0.2 / 0.3 / 0.4 |
-| [JBLiMP](#jblimp) | - |
-
+| JSQuAD | 0.1 / 0.2 / 0.3 / 0.4 |
+| JCommonsenseQA |  0.1 / 0.2 / 0.3 / 0.4 |
+| JNLI | 0.2 / 0.3 / 0.4 |
+| MARC-ja | 0.2 / 0.3 / 0.4 |
+| JaQuAD | 0.1 / 0.2 / 0.3 / 0.4 |
+| JBLiMP | - |
+| XLSum-ja | 0.0 / 0.3 / 0.4 |
 -----------------
 # Language Model Evaluation Harness
 
