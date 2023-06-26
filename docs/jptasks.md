@@ -85,6 +85,28 @@ python main.py \
     --output_path "result.json"
 ```
 
+## [XLSum-ja](https://huggingface.co/datasets/csebuetnlp/xlsum)
+This is a filtered Japanese subset of [XLSum](https://huggingface.co/datasets/csebuetnlp/xlsum) based on ROUGE-2, where [PaLM 2](https://arxiv.org/abs/2305.10403) uses. 
+
+**main features**
+- Filtered data based on 15-gram overlap as PaLM 2 did.
+  - link to dataset: https://huggingface.co/datasets/mkshing/xlsum_ja
+  - link to script: https://gist.github.com/mkshing/d6371cbfdd50d4f352cee247fd4dd86a
+- Compute ROUGE-2 based on Mecab Tokenizer
+
+**sample scripts**
+
+```
+python main.py \
+    --model hf-causal \
+    --model_args $MODEL_ARGS \
+    --tasks "xlsum_ja" \
+    --num_fewshot "1" \
+    --output_path "result.json"
+```
+
+* \* 1-shot setting In [PaLM 2](https://arxiv.org/abs/2305.10403)
+
 ## [JAQKET v2](https://www.nlp.ecei.tohoku.ac.jp/projects/jaqket/)
 
 >  JApanese Questions on Knowledge of EnTitie (JAQKET)Wikipediaの記事名を答えとした，日本語のオープンドメインQAデータセットです．
@@ -98,4 +120,3 @@ python main.py \
     --num_fewshot "1" \
     --output_path "result.json"
 ```
-

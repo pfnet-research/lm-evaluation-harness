@@ -1,5 +1,5 @@
 # Prompt Templates
-For JGLUE metrics, you can choose suitable prompt template for your model. 
+Before evaluation, you can choose suitable prompt template for your model. 
 
 Once you found the best one of the following supported templates, replace `TEMPLATE` to the template version. 
 
@@ -14,6 +14,10 @@ python main.py \
     --device "cuda" \
     --output_path "result.json"
 ```
+
+## `0.0`
+This version uses plausible prompt templates the contributor made. In most cases, templates in paper are well-investigated so that they should be good to use. But, the reality is that some eval tasks we want to support are never used before. In this case, the contributors would carefully think of the plausible prompt template as this version.
+
 
 ## `0.1`
 - **Reference:** [日本語に特化した60億パラメータ規模のGPTモデルの構築と評価](https://www.anlp.jp/proceedings/annual_meeting/2023/pdf_dir/H9-4.pdf)
