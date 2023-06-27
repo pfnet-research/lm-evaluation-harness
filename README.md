@@ -60,6 +60,8 @@ For more details, please see [docs/jptasks.md](https://github.com/Stability-AI/l
 | JaQuAD | 0.1 / 0.2 / 0.3 / 0.4 |
 | JBLiMP | - |
 | XLSum-ja | 0.0 / 0.3 / 0.4 |
+| JAQKET | 0.1 / 0.2 / 0.3 / 0.4 |
+
 -----------------
 # Language Model Evaluation Harness
 

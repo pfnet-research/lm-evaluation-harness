@@ -107,3 +107,16 @@ python main.py \
 
 * \* 1-shot setting In [PaLM 2](https://arxiv.org/abs/2305.10403)
 
+## [JAQKET v2](https://www.nlp.ecei.tohoku.ac.jp/projects/jaqket/)
+
+>  JApanese Questions on Knowledge of EnTitie (JAQKET)Wikipediaの記事名を答えとした，日本語のオープンドメインQAデータセットです．
+
+**sample script**
+```
+python main.py \
+    --model hf-causal \
+    --model_args $MODEL_ARGS \
+    --tasks "jaqket_v2" \
+    --num_fewshot "1" \
+    --output_path "result.json"
+```
