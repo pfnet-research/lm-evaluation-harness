@@ -66,7 +66,7 @@ class JAQKETV2(Task):
     def doc_to_text(self, doc):
         topk_titles = doc["ctxs"]["title"][:self.TOP_K_LIMIT]
         topk_contexts = doc["ctxs"]["text"][:self.TOP_K_LIMIT]
-        text = f"{self.SEP}".join([
+        context = f"{self.SEP}".join([
             "[題名]:"
             + title
             + f"{self.SEP}"
@@ -75,7 +75,7 @@ class JAQKETV2(Task):
             for title, context in zip(topk_titles, topk_contexts)
         ])
         return (
-            text
+            context
             + f"{self.SEP}"
             + "[質問]:"
             + doc["question"]
@@ -164,10 +164,10 @@ class JAQKETV2WithFintanPrompt(JAQKETV2):
     SEP = "\n"
     TOP_K_LIMIT = _TOP_K_LIMIT
     def doc_to_text(self, doc):
-        text = f"{self.SEP}".join([ctx for ctx in doc["ctxs"]["text"][:self.TOP_K_LIMIT]])
+        context = f"{self.SEP}".join([ctx for ctx in doc["ctxs"]["text"][:self.TOP_K_LIMIT]])
         return (
             "文章:"
-            + text
+            + context
             + f"{self.SEP}"
             + "質問:"
             + doc["question"]
@@ -193,7 +193,6 @@ class JAQKETV2WithJAAlpacaPrompt(JAQKETV2):
     PROMPT_VERSION = 0.3
     DESCRIPTION = "以下は、タスクを説明する指示と、文脈のある入力の組み合わせです。要求を適切に満たす応答を書きなさい。\n\n\n"
     INSTRUCTION = "与えられた文脈から、質問に対する答えを抜き出してください。\n\n"
-    # SEP = ""
     TOP_K_LIMIT = _TOP_K_LIMIT
     def doc_to_text(self, doc):
         """
@@ -208,8 +207,8 @@ class JAQKETV2WithJAAlpacaPrompt(JAQKETV2):
         ### 応答: 
         {response}
         """
-        text = "".join([ctx for ctx in doc["ctxs"]["text"][:self.TOP_K_LIMIT]])
-        input_text = f"文脈：{text}\n質問：{doc['question']}"
+        context = f"{self.SEP}".join([ctx for ctx in doc["ctxs"]["text"][:self.TOP_K_LIMIT]])
+        input_text = f"文脈：{context}\n質問：{doc['question']}"
         return f"### 指示:\n{self.INSTRUCTION}\n\n### 入力:\n{input_text}\n\n### 応答:\n"
 
 
@@ -220,11 +219,10 @@ class JAQKETV2WithRinnaInstructionSFT(JAQKETV2):
     """
     PROMPT_VERSION = 0.4
     DESCRIPTION = "ユーザー: 与えられた文脈から、質問に対する答えを抜き出してください。<NL>システム: 分かりました。"
-    # SEP = ""
     TOP_K_LIMIT = _TOP_K_LIMIT
     def doc_to_text(self, doc):
-        text = "".join([ctx for ctx in doc["ctxs"]["text"][:self.TOP_K_LIMIT]])
-        input_text = f"文脈：{text}<NL>質問：{doc['question']}"
+        context = "<NL>".join([ctx for ctx in doc["ctxs"]["text"][:self.TOP_K_LIMIT]])
+        input_text = f"文脈：{context}<NL>質問：{doc['question']}"
         return f"<NL>ユーザー: {input_text}<NL>システム: "
 
 
