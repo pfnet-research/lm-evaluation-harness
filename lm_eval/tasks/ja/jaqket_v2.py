@@ -218,12 +218,15 @@ class JAQKETV2WithRinnaInstructionSFT(JAQKETV2):
     - HF Hub: https://huggingface.co/rinna/japanese-gpt-neox-3.6b-instruction-sft
     """
     PROMPT_VERSION = 0.4
-    DESCRIPTION = "ユーザー: 与えられた文脈から、質問に対する答えを抜き出してください。<NL>システム: 分かりました。"
+    DESCRIPTION = "ユーザー: 与えられた文脈から、質問に対する答えを抜き出してください。<NL>システム: 分かりました。<NL>"
     TOP_K_LIMIT = _TOP_K_LIMIT
+    SEP = "<NL>"
+    FEWSHOT_SEP = "<NL>"
+
     def doc_to_text(self, doc):
-        context = "<NL>".join([ctx for ctx in doc["ctxs"]["text"][:self.TOP_K_LIMIT]])
-        input_text = f"文脈：{context}<NL>質問：{doc['question']}"
-        return f"<NL>ユーザー: {input_text}<NL>システム: "
+        context = self.SEP.join([ctx for ctx in doc["ctxs"]["text"][:self.TOP_K_LIMIT]])
+        input_text = f"文脈：{context}{self.SEP}質問：{doc['question']}"
+        return f"ユーザー: {input_text}{self.SEP}システム: "
 
 
 VERSIONS = [

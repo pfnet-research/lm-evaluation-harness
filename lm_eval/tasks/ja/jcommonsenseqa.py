@@ -39,7 +39,7 @@ class JCommonsenseQA(MultipleChoiceTask):
     DATASET_PATH = "shunk031/JGLUE"
     DATASET_NAME = "JCommonsenseQA"
     DESCRIPTION = "[問題]に対する[答え]を[選択肢]の中から選んでください。\n\n"
-
+    
     def has_training_docs(self):
         return True
 
@@ -180,11 +180,14 @@ class JCommonsenseQAWithRinnaInstructionSFT(JCommonsenseQA):
     """
     VERSION = 1.1
     PROMPT_VERSION = 0.4
-    DESCRIPTION = "ユーザー: 与えられた選択肢の中から、最適な答えを選んでください。<NL>システム: 分かりました。"
+    DESCRIPTION = "ユーザー: 与えられた選択肢の中から、最適な答えを選んでください。<NL>システム: 分かりました。<NL>"
+    SEP="<NL>"
+    FEWSHOT_SEP = "<NL>"
+
     def doc_to_text(self, doc):
-        choices = "<NL>".join([f"- {choice}" for choice in doc['choices']])
-        input_text = f"質問：{doc['goal']}<NL>" + f"選択肢：<NL>{choices}"
-        return f"<NL>ユーザー: {input_text}<NL>システム: "
+        choices = self.SEP.join([f"- {choice}" for choice in doc['choices']])
+        input_text = f"質問：{doc['goal']}{self.SEP}" + f"選択肢：{self.SEP}{choices}"
+        return f"ユーザー: {input_text}{self.SEP}システム: "
         
 
 

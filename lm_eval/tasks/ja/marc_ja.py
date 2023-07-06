@@ -128,12 +128,14 @@ class MARCJaWithRinnaInstructionSFT(MARCJaWithFintanPrompt):
     - HF Hub: https://huggingface.co/rinna/japanese-gpt-neox-3.6b-instruction-sft
     """
     PROMPT_VERSION = 0.4
-    DESCRIPTION = "ユーザー: 与えられた製品レビューを、ポジティブまたはネガティブの感情クラスのいずれかに分類してください。<NL>システム: 分かりました。"    
+    DESCRIPTION = "ユーザー: 与えられた製品レビューを、ポジティブまたはネガティブの感情クラスのいずれかに分類してください。<NL>システム: 分かりました。<NL>"    
     CHOICES = ["ポジティブ", "ネガティブ"]
+    SEP = "<NL>"
+    FEWSHOT_SEP = "<NL>"
 
     def doc_to_text(self, doc):
         input_text = doc['query']
-        return f"<NL>ユーザー: {input_text}<NL>システム: "   
+        return f"ユーザー: {input_text}{self.SEP}システム: "   
 
 
 
