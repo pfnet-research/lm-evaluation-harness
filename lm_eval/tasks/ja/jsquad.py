@@ -212,8 +212,8 @@ class JSQuADWithJAAlpacaPrompt(JSQuAD):
     - code: https://github.com/Stability-AI/gpt-neox/blob/c130a4edc1120dccec8f02a34eb60d3e8f484cd3/finetune/finetune_base_ja.py#LL118C23-L127C11
     """
     PROMPT_VERSION = 0.3
-    DESCRIPTION = "以下は、タスクを説明する指示と、文脈のある入力の組み合わせです。要求を適切に満たす応答を書きなさい。\n\n\n"
-    INSTRUCTION = "与えられた文脈から、質問に対する答えを抜き出してください。\n\n"
+    DESCRIPTION = "以下は、タスクを説明する指示と、文脈のある入力の組み合わせです。要求を適切に満たす応答を書きなさい。\n\n"
+    INSTRUCTION = "与えられた文脈から、質問に対する答えを抜き出してください。"
     def doc_to_text(self, doc):
         """
         以下は、タスクを説明する指示と、文脈のある入力の組み合わせです。要求を適切に満たす応答を書きなさい。

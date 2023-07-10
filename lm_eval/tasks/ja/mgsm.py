@@ -130,7 +130,7 @@ class MGSM(GradeSchoolMath8K):
 class MGSMWithJAAlpacaPrompt(MGSM):
     PROMPT_VERSION = 0.3
     DESCRIPTION = "以下は、タスクを説明する指示と、文脈のある入力の組み合わせです。要求を適切に満たす応答を書きなさい。\n\n"
-    INSTRUCTION = "与えられた問題に対して、ステップごとに答えを導き出してください。\n\n"
+    INSTRUCTION = "与えられた問題に対して、ステップごとに答えを導き出してください。"
     def doc_to_text(self, doc):
         """
         以下は、タスクを説明する指示と、文脈のある入力の組み合わせです。要求を適切に満たす応答を書きなさい。

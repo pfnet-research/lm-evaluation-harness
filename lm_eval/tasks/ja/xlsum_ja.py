@@ -165,8 +165,8 @@ class XLSumJa(Task):
 
 class XLSumJaWithJAAlpacaPrompt(XLSumJa):
     PROMPT_VERSION = 0.3
-    DESCRIPTION = "以下は、タスクを説明する指示と、文脈のある入力の組み合わせです。要求を適切に満たす応答を書きなさい。\n\n\n"
-    INSTRUCTION = "与えられたニュース記事を要約してください。\n\n"
+    DESCRIPTION = "以下は、タスクを説明する指示と、文脈のある入力の組み合わせです。要求を適切に満たす応答を書きなさい。\n\n"
+    INSTRUCTION = "与えられたニュース記事を要約してください。"
     def doc_to_text(self, doc):
         """
         以下は、タスクを説明する指示と、文脈のある入力の組み合わせです。要求を適切に満たす応答を書きなさい。
