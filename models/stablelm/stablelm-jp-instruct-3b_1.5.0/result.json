@@ -1,26 +1,26 @@
 {
   "results": {
     "jcommonsenseqa-1.1-0.3": {
-      "acc": 0.6568364611260054,
-      "acc_stderr": 0.014199017466495316,
-      "acc_norm": 0.6085790884718498,
-      "acc_norm_stderr": 0.014596866057480272
+      "acc": 0.6470062555853441,
+      "acc_stderr": 0.014292784399283947,
+      "acc_norm": 0.5978552278820375,
+      "acc_norm_stderr": 0.014664536048234707
     },
     "jnli-1.1-0.3": {
-      "acc": 0.41536565324568614,
-      "acc_stderr": 0.009990481029457437,
-      "acc_norm": 0.37962202136400985,
-      "acc_norm_stderr": 0.00983858927838246
+      "acc": 0.43385373870172556,
+      "acc_stderr": 0.010047660204862594,
+      "acc_norm": 0.39400164338537386,
+      "acc_norm_stderr": 0.009906350398312128
     },
     "marc_ja-1.1-0.3": {
-      "acc": 0.7595047087547959,
-      "acc_stderr": 0.00564452698023869,
-      "acc_norm": 0.7595047087547959,
-      "acc_norm_stderr": 0.00564452698023869
+      "acc": 0.757516802263884,
+      "acc_stderr": 0.0057002967847203725,
+      "acc_norm": 0.757516802263884,
+      "acc_norm_stderr": 0.0057002967847203725
     },
     "jsquad-1.1-0.3": {
-      "exact_match": 48.64925709140027,
-      "f1": 56.85817082979781
+      "exact_match": 49.437190454750116,
+      "f1": 57.5798081331756
     }
   },
   "versions": {
@@ -31,7 +31,7 @@
   },
   "config": {
     "model": "hf-causal",
-    "model_args": "pretrained=/fsx/proj-jp-stablegpt/sft/checkpoints/stablelm-jp-instruct-3b_1.5.0,tokenizer=/fsx/proj-jp-stablegpt/tokenizers/nai-hf-tokenizer/,use_fast=False",
+    "model_args": "pretrained={PROJECT_DIR}/sft/checkpoints/stablelm-jp-instruct-3b_1.5.0,tokenizer={PROJECT_DIR}/tokenizers/nai-hf-tokenizer/,use_fast=False",
     "num_fewshot": [
       2,
       3,
