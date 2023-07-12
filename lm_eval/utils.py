@@ -12,7 +12,7 @@ import torch
 from omegaconf import OmegaConf
 
 import sacrebleu
-import rouge_score
+from rouge_score import rouge_scorer, scoring
 
 
 class ExitCodeError(Exception):
