@@ -98,7 +98,7 @@ class JNLIWithJAAlpacaPrompt(JNLIWithFintanPrompt):
     - code: https://github.com/Stability-AI/gpt-neox/blob/c130a4edc1120dccec8f02a34eb60d3e8f484cd3/finetune/finetune_base_ja.py#LL118C23-L127C11
     """
     PROMPT_VERSION = 0.3
-    DESCRIPTION = "以下は、タスクを説明する指示と、文脈のある入力の組み合わせです。要求を適切に満たす応答を書きなさい。\n\n\n"
+    DESCRIPTION = "以下は、タスクを説明する指示と、文脈のある入力の組み合わせです。要求を適切に満たす応答を書きなさい。\n\n"
     INSTRUCTION = f"与えられた前提と仮説の関係を回答してください。\n\n出力は以下から選択してください：\n" + "\n".join(JNLIWithFintanPrompt.CHOICES)
 
     def doc_to_text(self, doc):
@@ -125,10 +125,13 @@ class JNLIWithRinnaInstructionSFT(JNLIWithFintanPrompt):
     - HF Hub: https://huggingface.co/rinna/japanese-gpt-neox-3.6b-instruction-sft
     """
     PROMPT_VERSION = 0.4
-    DESCRIPTION = "ユーザー: " + f"与えられた前提と仮説の関係を回答してください。出力は以下から選択してください：<NL>" + "<NL>".join(JNLIWithFintanPrompt.CHOICES) + "<NL>システム: 分かりました。"
+    DESCRIPTION = "ユーザー: " + f"与えられた前提と仮説の関係を回答してください。出力は以下から選択してください：<NL>" + "<NL>".join(JNLIWithFintanPrompt.CHOICES) + "<NL>システム: 分かりました。<NL>"
+    SEP = "<NL>"
+    FEWSHOT_SEP = "<NL>"
+
     def doc_to_text(self, doc):
         input_text = f"前提：{doc['premise']}\n仮説：{doc['hypothesis']}"
-        return f"<NL>ユーザー: {input_text}<NL>システム: "
+        return f"ユーザー: {input_text}{self.SEP}システム: "
    
 
 

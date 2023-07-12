@@ -100,8 +100,8 @@ class MARCJaWithJAAlpacaPrompt(MARCJaWithFintanPrompt):
     - code: https://github.com/Stability-AI/gpt-neox/blob/c130a4edc1120dccec8f02a34eb60d3e8f484cd3/finetune/finetune_base_ja.py#LL118C23-L127C11
     """
     PROMPT_VERSION = 0.3
-    DESCRIPTION = "以下は、タスクを説明する指示と、文脈のある入力の組み合わせです。要求を適切に満たす応答を書きなさい。\n\n\n"
-    INSTRUCTION = "以下の製品レビューを、ポジティブまたはネガティブの感情クラスのいずれかに分類してください。 \n\n"
+    DESCRIPTION = "以下は、タスクを説明する指示と、文脈のある入力の組み合わせです。要求を適切に満たす応答を書きなさい。\n\n"
+    INSTRUCTION = "以下の製品レビューを、ポジティブまたはネガティブの感情クラスのいずれかに分類してください。"
     CHOICES = ["ポジティブ", "ネガティブ"]
 
     def doc_to_text(self, doc):
@@ -128,12 +128,14 @@ class MARCJaWithRinnaInstructionSFT(MARCJaWithFintanPrompt):
     - HF Hub: https://huggingface.co/rinna/japanese-gpt-neox-3.6b-instruction-sft
     """
     PROMPT_VERSION = 0.4
-    DESCRIPTION = "ユーザー: 与えられた製品レビューを、ポジティブまたはネガティブの感情クラスのいずれかに分類してください。<NL>システム: 分かりました。"    
+    DESCRIPTION = "ユーザー: 与えられた製品レビューを、ポジティブまたはネガティブの感情クラスのいずれかに分類してください。<NL>システム: 分かりました。<NL>"    
     CHOICES = ["ポジティブ", "ネガティブ"]
+    SEP = "<NL>"
+    FEWSHOT_SEP = "<NL>"
 
     def doc_to_text(self, doc):
         input_text = doc['query']
-        return f"<NL>ユーザー: {input_text}<NL>システム: "   
+        return f"ユーザー: {input_text}{self.SEP}システム: "   
 
 
 

@@ -59,6 +59,11 @@ from .ja import jnli
 from .ja import marc_ja
 from .ja import jblimp
 from .ja import wikilingua
+from .ja import xwinograd
+from .ja import xlsum_ja
+from .ja import jaqket_v2
+from .ja import mgsm
+
 ########################################
 # Translation tasks
 ########################################
@@ -329,6 +334,13 @@ TASK_REGISTRY = {
     **marc_ja.construct_tasks(),
     "jblimp": jblimp.JBlimp,
     "wikilingua_ja": wikilingua.Wikilingua,
+    "xwinograd_ja": xwinograd.XWinogradJA,
+    "xlsum_ja": xlsum_ja.XLSumJa,
+    **xlsum_ja.construct_tasks(),
+    "jaqket_v2": jaqket_v2.JAQKETV2,
+    **jaqket_v2.construct_tasks(),
+    "mgsm": mgsm.MGSM,
+    **mgsm.construct_tasks()
 }
 
 
