@@ -49,7 +49,7 @@ class Wikilingua(Task):
     def test_docs(self):
         return self.dataset["test"]
     
-    def train_docs(self):
+    def training_docs(self):
         return self.dataset["train"]
 
     def doc_to_text(self, doc):
