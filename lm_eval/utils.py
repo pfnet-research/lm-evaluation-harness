@@ -277,6 +277,12 @@ def rouge(refs, preds):
     return {type: result[type].mid.fmeasure * 100 for type in rouge_types}
 
 def rouge2_mecab(refs, preds, tokenizer):
+    """This uses a MeCab tokenizer for Japanese text.
+
+    Besides specifying the tokenizer, this does not perform the rougeLsum
+    related sentence/newline normalization, and only calculates rouge2.
+    Otherwise it is the same as the generic rouge scoring.
+    """
     rouge_types = ["rouge2"]
     # mecab-based rouge 
     scorer = rouge_scorer.RougeScorer(
