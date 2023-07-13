@@ -275,3 +275,18 @@ def rouge(refs, preds):
         aggregator.add_scores(scorer.score(ref, pred))
     result = aggregator.aggregate()
     return {type: result[type].mid.fmeasure * 100 for type in rouge_types}
+
+def rouge2_mecab(refs, preds, tokenizer):
+    rouge_types = ["rouge2"]
+    # mecab-based rouge 
+    scorer = rouge_scorer.RougeScorer(
+        rouge_types,
+        tokenizer=tokenizer,
+    )
+
+    # Accumulate confidence intervals.
+    aggregator = scoring.BootstrapAggregator()
+    for ref, pred in zip(refs, preds):
+        aggregator.add_scores(scorer.score(ref, pred))
+    result = aggregator.aggregate()
+    return {type: result[type].mid.fmeasure * 100 for type in rouge_types}
