@@ -10,7 +10,7 @@ import numpy as np
 import datasets
 from lm_eval.base import rf, Task
 from lm_eval.metrics import mean
-from lm_eval.utils import bleu, rouge
+from lm_eval.utils import rouge2_mecab
 
 
 
@@ -21,15 +21,18 @@ _CITATION = """
 
 # TODO make a summarization task
 class Wikilingua(Task):
-    VERSION = 1
+    VERSION = 1.0
     # custom prompt
     PROMPT_VERSION = 0.0
     DATASET_PATH = "GEM/wiki_lingua"
     DATASET_NAME = "ja"
     DESCRIPTION = "与えられた文章を要約して下さい。\n\n"
+    LOAD_TOKENIZER = True
 
     def __init__(self):
         super().__init__()
+        from . import MecabTokenizer
+        self.tokenizer = MecabTokenizer()
 
     def has_training_docs(self):
         return True
@@ -89,29 +92,22 @@ class Wikilingua(Task):
         completion = results[0].strip()
 
         ref = doc["source"]
-        bleu_score = bleu([[ref]], [completion])
-        rouge_scores = rouge([ref], [completion])
-
 
         return {
-            "bleu": bleu_score,
-            "rouge1": rouge_scores["rouge1"],
-            "rouge2": rouge_scores["rouge2"],
-            "rougeL": rouge_scores["rougeLsum"],
+            "rouge2": (completion, ref)
         }
+
+    def _rouge(self, item):
+        predictions, references = zip(*item)
+        res = rouge2_mecab(refs=references, preds=predictions, tokenizer=self.tokenizer)
+        return res["rouge2"]
 
     def aggregation(self):
         return {
-            "bleu": mean,
-            "rouge1": mean,
-            "rouge2": mean,
-            "rougeL": mean,
+            "rouge2": self._rouge,
         }
 
     def higher_is_better(self):
         return {
-            "bleu": True,
-            "rouge1": True,
             "rouge2": True,
-            "rougeL": True,
         }
