@@ -84,3 +84,90 @@ python main.py \
     --num_fewshot "0" \
     --output_path "result.json"
 ```
+
+## [XLSum-ja](https://huggingface.co/datasets/csebuetnlp/xlsum)
+This is a filtered Japanese subset of [XLSum](https://huggingface.co/datasets/csebuetnlp/xlsum) based on ROUGE-2, where [PaLM 2](https://arxiv.org/abs/2305.10403) uses. 
+
+**main features**
+- Filtered data based on 15-gram overlap as PaLM 2 did.
+  - link to dataset: https://huggingface.co/datasets/mkshing/xlsum_ja
+  - link to script: https://gist.github.com/mkshing/d6371cbfdd50d4f352cee247fd4dd86a
+- Compute ROUGE-2 based on Mecab Tokenizer
+
+**sample scripts**
+
+```
+python main.py \
+    --model hf-causal \
+    --model_args $MODEL_ARGS \
+    --tasks "xlsum_ja" \
+    --num_fewshot "1" \
+    --output_path "result.json"
+```
+
+* \* 1-shot setting In [PaLM 2](https://arxiv.org/abs/2305.10403)
+
+## [XWinograd](https://huggingface.co/datasets/Muennighoff/xwinograd)
+
+XWinograd is a set of Winograd Schema sentence pairs. For example:
+
+- ボブはトムに尋ねた。トムはお金をいくらか貸してくれるかと。
+- ボブはトムに尋ねた。ボブはお金をいくらか貸してくれるかと。
+
+In this case the first sentence is correct, because it doesn't make sense for Bob to ask Tom how much money Bob himself will loan.
+
+The task is for the model to assign the higher log likelihood to the reasonable sentence. Because of the way the task is defined, it's always zero-shot with no prompt.
+
+While XWinograd is a multilingual task, this only uses the Japanese subset, which has 959 pairs.
+
+**sample scripts**
+
+```
+python main.py \
+    --model hf-causal \
+    --model_args $MODEL_ARGS \
+    --tasks xwinograd_ja \
+    --num_fewshot 0 \
+    --output_path result.json
+```
+
+## [JAQKET v2](https://www.nlp.ecei.tohoku.ac.jp/projects/jaqket/)
+
+>  JApanese Questions on Knowledge of EnTitie (JAQKET)Wikipediaの記事名を答えとした，日本語のオープンドメインQAデータセットです．
+
+**sample script**
+
+```
+python main.py \
+    --model hf-causal \
+    --model_args $MODEL_ARGS \
+    --tasks "jaqket_v2" \
+    --num_fewshot "1" \
+    --output_path "result.json"
+```
+
+## [MGSM](https://huggingface.co/datasets/juletxara/mgsm)
+
+[Multilingual Grade School Math](https://arxiv.org/pdf/2210.03057.pdf) is a set of 250 math word problems in Japanese, and the task is to get the right integer solution to the problem.
+The dataset includes step-by-step solutions of example problems which are included in the prompt to induce Chain-of-Thought reasoning.
+
+The task is rather hard, with gpt3/text-davinci-002 achieving 26% accuracy at 4-shot. 
+Though this dataset was translated to Japanese by a human, some errors nonetheless occur including in the few-shot examples that are included in the prompt at every generation.
+
+The implementation here features an auto-reduction of the number of examples included in the prompt if the prompt becomes larger than the model's context length.
+
+Use mgsm-1.0-0.0 by default and mgsm-1.0-0.4 for the rinna instruction prompt.
+
+**sample scripts**
+
+Hugging Face models
+
+```
+python main.py \
+    --model hf-causal
+    --model_args $MODEL_ARGS 
+    --tasks mgsm-1.0-0.4
+    --num_fewshot "4" 
+    --device "cuda" 
+    --output_path "result.mgsm.json"
+```

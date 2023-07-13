@@ -222,6 +222,9 @@ def evaluate(
                 task.set_tokenizer(lm.lm.tokenizer)
             else:
                 task.set_tokenizer(lm.tokenizer)
+        # set max_length to task object
+        task.max_length = lm.lm.max_length if isinstance(lm, lm_eval.base.CachingLM) else lm.max_length
+        task.max_gen_toks = lm.lm.max_gen_toks if isinstance(lm, lm_eval.base.CachingLM) else lm.max_gen_toks
         
         limit_local = limit[idx]
         if isinstance(limit_local, float):

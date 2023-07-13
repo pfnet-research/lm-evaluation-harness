@@ -194,7 +194,8 @@ class GPT3LM(BaseLM):
             list(sameuntil_chunks(re_ord.get_reordered(), self.REQ_CHUNK_SIZE))
         ):
             inps = []
-            for context, _ in chunk:
+            for request in chunk:
+                context = request[0]
                 context_enc = self.tok_encode(context)
                 inp = context_enc[-(self.max_length - self.max_gen_toks) :]
                 inps.append(inp)
@@ -208,7 +209,9 @@ class GPT3LM(BaseLM):
                 stop=until,
             )
 
-            for resp, (context, until_) in zip(response.choices, chunk):
+            for resp, request in zip(response.choices, chunk):
+                context = request[0]
+                until_ = request[1]
                 s = resp["text"]
 
                 for term in until_:

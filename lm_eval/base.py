@@ -624,9 +624,15 @@ class Task(abc.ABC):
             print(
                 "WARNING: provide_description is deprecated and will be removed in a future version in favor of description_dict"
             )
-
+        if hasattr(self, "FEWSHOT_SEP"):
+            FEWSHOT_SEP = self.FEWSHOT_SEP
+        elif hasattr(self, "SEP"):
+            FEWSHOT_SEP = f"{self.SEP}{self.SEP}"
+        else:        
+            FEWSHOT_SEP = "\n\n"
+            
         if description:
-            description += "\n\n"
+            description += FEWSHOT_SEP
         elif hasattr(self, "DESCRIPTION"):
             description = self.DESCRIPTION
         else:
@@ -652,13 +658,13 @@ class Task(abc.ABC):
                 fewshotex = [x for x in fewshotex if x != doc][:num_fewshot]
 
             labeled_examples = (
-                "\n\n".join(
+                FEWSHOT_SEP.join(
                     [
                         self.doc_to_text(doc) + self.doc_to_target(doc)
                         for doc in fewshotex
                     ]
                 )
-                + "\n\n"
+                + FEWSHOT_SEP
             )
 
         example = self.doc_to_text(doc)
