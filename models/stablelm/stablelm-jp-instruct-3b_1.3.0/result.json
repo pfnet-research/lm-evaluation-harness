@@ -1,37 +1,37 @@
 {
   "results": {
+    "jsquad-1.1-0.3": {
+      "exact_match": 49.66231427285007,
+      "f1": 58.12505455006851
+    },
     "jcommonsenseqa-1.1-0.3": {
-      "acc": 0.6747095621090259,
-      "acc_stderr": 0.014011130539224197,
-      "acc_norm": 0.6175156389633601,
-      "acc_norm_stderr": 0.014534828771100699
+      "acc": 0.6818588025022342,
+      "acc_stderr": 0.013929524118781669,
+      "acc_norm": 0.612153708668454,
+      "acc_norm_stderr": 0.014572671068404116
     },
     "jnli-1.1-0.3": {
-      "acc": 0.3964667214461791,
-      "acc_stderr": 0.009917059666755539,
-      "acc_norm": 0.3742810188989318,
-      "acc_norm_stderr": 0.009811095696364442
+      "acc": 0.3944124897288414,
+      "acc_stderr": 0.009908153585310055,
+      "acc_norm": 0.3722267871815941,
+      "acc_norm_stderr": 0.009800182146953525
     },
     "marc_ja-1.1-0.3": {
-      "acc": 0.7615847187831624,
-      "acc_stderr": 0.005667436488592367,
-      "acc_norm": 0.7615847187831624,
-      "acc_norm_stderr": 0.005667436488592367
-    },
-    "jsquad-1.1-0.3": {
-      "exact_match": 51.39576767221972,
-      "f1": 60.131741985610404
+      "acc": 0.7493809692253272,
+      "acc_stderr": 0.005763932154731779,
+      "acc_norm": 0.7493809692253272,
+      "acc_norm_stderr": 0.005763932154731779
     }
   },
   "versions": {
+    "jsquad-1.1-0.3": 1.1,
     "jcommonsenseqa-1.1-0.3": 1.1,
     "jnli-1.1-0.3": 1.1,
-    "jsquad-1.1-0.3": 1.1,
     "marc_ja-1.1-0.3": 1.1
   },
   "config": {
     "model": "hf-causal",
-    "model_args": "pretrained=${PROJECT_DIR}/stablelm-jp-instruct-3b_1.3.0/,tokenizer=${PROJECT_DIR}/tokenizers/nai-hf-tokenizer/,use_fast=False",
+    "model_args": "pretrained={PROJECT_DIR}/instruction_tuning/outputs/stablelm-jp-instruct-3b_1.3.0/,tokenizer={PROJECT_DIR}/tokenizers/nai-hf-tokenizer/,use_fast=False",
     "num_fewshot": [
       2,
       3,
@@ -40,7 +40,7 @@
     ],
     "batch_size": null,
     "device": "cuda",
-    "no_cache": false,
+    "no_cache": true,
     "limit": null,
     "bootstrap_iters": 100000,
     "description_dict": {}
