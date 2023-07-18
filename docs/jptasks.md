@@ -85,6 +85,21 @@ python main.py \
     --output_path "result.json"
 ```
 
+## [Wikilingua](https://github.com/esdurmus/Wikilingua)
+
+Wikilingua is a summarization task using documents constructed from Wikihow articles. While the original dataset is multilingual, for now it just the Japanese version has been added.
+
+**sample script**
+
+```
+python main.py \
+    --model hf-causal \
+    --model_args $MODEL_ARGS \
+    --tasks "wikilingua_ja" \
+    --num_fewshot "1" \
+    --output_path "result.json"
+```
+
 ## [XLSum-ja](https://huggingface.co/datasets/csebuetnlp/xlsum)
 This is a filtered Japanese subset of [XLSum](https://huggingface.co/datasets/csebuetnlp/xlsum) based on ROUGE-2, where [PaLM 2](https://arxiv.org/abs/2305.10403) uses. 
 

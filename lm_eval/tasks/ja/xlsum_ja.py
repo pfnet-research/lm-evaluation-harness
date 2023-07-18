@@ -10,7 +10,7 @@ Homepage: https://github.com/csebuetnlp/xl-sum
 """
 import os
 import inspect
-from rouge_score import rouge_scorer, scoring
+from lm_eval.utils import rouge2_mecab
 from lm_eval.base import rf, Task
 
 
@@ -145,22 +145,8 @@ class XLSumJa(Task):
     
     def _rouge(self, item):
         predictions, references = zip(*item)
-        return self.rouge(refs=references, preds=predictions)["rouge2"]
-
-    def rouge(self, refs, preds):
-        rouge_types = ["rouge2"]
-        # mecab-based rouge 
-        scorer = rouge_scorer.RougeScorer(
-            rouge_types,
-            tokenizer=self.tokenizer,
-        )
-
-        # Accumulate confidence intervals.
-        aggregator = scoring.BootstrapAggregator()
-        for ref, pred in zip(refs, preds):
-            aggregator.add_scores(scorer.score(ref, pred))
-        result = aggregator.aggregate()
-        return {type: result[type].mid.fmeasure * 100 for type in rouge_types}
+        res = rouge2_mecab(refs=references, preds=predictions, tokenizer=self.tokenizer)
+        return res["rouge2"]
 
 
 class XLSumJaWithJAAlpacaPrompt(XLSumJa):
