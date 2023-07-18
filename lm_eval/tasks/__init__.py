@@ -333,7 +333,7 @@ TASK_REGISTRY = {
     "marc_ja": marc_ja.MARCJaWithFintanPrompt,
     **marc_ja.construct_tasks(),
     "jblimp": jblimp.JBlimp,
-    "wikilingua_ja": wikilingua.Wikilingua,
+    **wikilingua.construct_tasks(),
     "xwinograd_ja": xwinograd.XWinogradJA,
     "xlsum_ja": xlsum_ja.XLSumJa,
     **xlsum_ja.construct_tasks(),

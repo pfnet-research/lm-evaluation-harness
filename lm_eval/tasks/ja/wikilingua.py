@@ -48,7 +48,7 @@ class Wikilingua(Task):
 
     def test_docs(self):
         return self.dataset["test"]
-    
+
     def training_docs(self):
         return self.dataset["train"]
 
@@ -111,3 +111,55 @@ class Wikilingua(Task):
         return {
             "rouge2": True,
         }
+
+class WikilinguaWithJAAlpacaPrompt(Wikilingua):
+    PROMPT_VERSION = 0.3
+    DESCRIPTION = "以下は、タスクを説明する指示と、文脈のある入力の組み合わせです。要求を適切に満たす応答を書きなさい。\n\n"
+    INSTRUCTION = "与えられたニュース記事を要約してください。"
+    def doc_to_text(self, doc):
+        """
+        以下は、タスクを説明する指示と、文脈のある入力の組み合わせです。要求を適切に満たす応答を書きなさい。
+
+        ### 指示:
+        {instruction}
+
+        ### 入力:
+        {input}
+
+        ### 応答:
+        {response}
+        """
+        input_text = f"ニュース記事:{doc['text']}"
+        return f"### 指示:\n{self.INSTRUCTION}\n\n### 入力:\n{input_text}\n\n### 応答:\n"
+
+
+class WikilinguaJaWithRinnaInstructionSFT(Wikilingua):
+    """
+    Reference:
+    - HF Hub: https://huggingface.co/rinna/japanese-gpt-neox-3.6b-instruction-sft
+    """
+    PROMPT_VERSION = 0.4
+    DESCRIPTION = "ユーザー: 与えられたニュース記事を要約してください。<NL>システム: 分かりました。<NL>"
+    SEP = "<NL>"
+    FEWSHOT_SEP = "<NL>"
+
+    def doc_to_text(self, doc):
+        input_text = f"ニュース記事:{doc['text']}"
+        return f"ユーザー: {input_text}{self.SEP}システム: "
+
+    def preprocess_ctx(self, ctx, max_length):
+        return super().preprocess_ctx(ctx, max_length, ctx_prompt=f"{self.SEP}ユーザー: ", summary_prompt=f"{self.SEP}システム: ")
+
+
+VERSIONS = [
+    Wikilingua,
+    Wikilingua,
+    WikilinguaWithJAAlpacaPrompt,
+    WikilinguaWithRinnaInstructionSFT,
+]
+
+def construct_tasks():
+    tasks = {}
+    for version_class in VERSIONS:
+        tasks[f"wikilingua_ja-{version_class.VERSION}-{version_class.PROMPT_VERSION}"] = version_class
+    return tasks
