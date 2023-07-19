@@ -102,7 +102,14 @@ class XLSumJa(Task):
             for s in sentences:
                 tmp = add_sentences + [s]
                 if len(self._tokenize(text="。".join(tmp))) > max_length_per_shot:
-                    add_sentences[-1] += "。"+self.SEP
+                    if len(add_sentences) > 0:
+                        add_sentences[-1] += "。"+self.SEP
+                    else:
+                        # I believe this case does't happen. But, let's make sure to avoid IndexError
+                        # In this case, just truncate the first sentence
+                        token_ids = self._tokenize(s)[:max_length_per_shot]
+                        truncated_s = self.tokenizer.decode(token_ids, skip_special_tokens=True)
+                        add_sentences.append(truncated_s+self.SEP)
                     break
                 add_sentences.append(s)
             c_res += "。".join(add_sentences)
