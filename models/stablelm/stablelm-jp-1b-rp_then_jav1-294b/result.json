@@ -31,7 +31,7 @@
   },
   "config": {
     "model": "hf-causal",
-    "model_args": "pretrained=/fsx/proj-jp-stablegpt/hf_model/1b-rp_then_jav1-294b,tokenizer=/fsx/proj-jp-stablegpt/tokenizers/nai-hf-tokenizer/,use_fast=False",
+    "model_args": "pretrained=${PROJECT_DIR}/hf_model/1b-rp_then_jav1-294b,tokenizer=${PROJECT_DIR}/tokenizers/nai-hf-tokenizer/,use_fast=False",
     "num_fewshot": [
       2,
       3,
