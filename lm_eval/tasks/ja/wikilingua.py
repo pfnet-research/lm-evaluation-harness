@@ -133,7 +133,7 @@ class WikilinguaWithJAAlpacaPrompt(Wikilingua):
         return f"### 指示:\n{self.INSTRUCTION}\n\n### 入力:\n{input_text}\n\n### 応答:\n"
 
 
-class WikilinguaJaWithRinnaInstructionSFT(Wikilingua):
+class WikilinguaWithRinnaInstructionSFT(Wikilingua):
     """
     Reference:
     - HF Hub: https://huggingface.co/rinna/japanese-gpt-neox-3.6b-instruction-sft
@@ -152,7 +152,6 @@ class WikilinguaJaWithRinnaInstructionSFT(Wikilingua):
 
 
 VERSIONS = [
-    Wikilingua,
     Wikilingua,
     WikilinguaWithJAAlpacaPrompt,
     WikilinguaWithRinnaInstructionSFT,
