@@ -107,8 +107,6 @@ class XLSumJa(Task):
                 add_sentences.append(s)
             c_res += "。".join(add_sentences)
             res += f"{c_res}{summary_prompt}{summary}"
-        # print("#"*100+f"\n{ctx}\n"+"#"*100+f"\n{res}\n"+"#"*100)
-        raise RuntimeError("#"*100+f"\n{res}\n"+"#"*100)
         return res
     
     def _tokenize(self, text, **kwargs):
