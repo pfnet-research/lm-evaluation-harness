@@ -52,6 +52,7 @@ class XLSumJa(Task):
     DATASET_NAME = None
     DESCRIPTION = "与えられたニュース記事を要約してください。\n\n"
     LOAD_TOKENIZER = True
+    SEP="\n"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -89,7 +90,7 @@ class XLSumJa(Task):
         ctxs = [f"{ctx_prompt}{c}"for c in ctx.split(ctx_prompt)]
         description = ""
         if summary_prompt not in ctxs[0]:
-            description = ctxs[0]
+            description = ctxs[0].replace(ctx_prompt, "")
             ctxs = ctxs[1:]
         max_length_per_shot = max_length // len(ctxs)
         res = description
@@ -97,12 +98,17 @@ class XLSumJa(Task):
             text, summary = c.split(summary_prompt)
             sentences = text.split("。")
             c_res = ""
+            add_sentences = []
             for s in sentences:
-                if len(self._tokenize(text=c_res+s)) > max_length_per_shot:
-                    c_res += "\n"
+                tmp = add_sentences + [s]
+                if len(self._tokenize(text="。".join(tmp))) > max_length_per_shot:
+                    add_sentences[-1] += "。"+self.SEP
                     break
-                c_res += s + "。"
+                add_sentences.append(s)
+            c_res += "。".join(add_sentences)
             res += f"{c_res}{summary_prompt}{summary}"
+        # print("#"*100+f"\n{ctx}\n"+"#"*100+f"\n{res}\n"+"#"*100)
+        raise RuntimeError("#"*100+f"\n{res}\n"+"#"*100)
         return res
     
     def _tokenize(self, text, **kwargs):
@@ -120,7 +126,7 @@ class XLSumJa(Task):
             # length + some buffers (10)
             max_num_tokens = len(self._tokenize(doc["summary"])) + 10
         ctx = self.preprocess_ctx(ctx, max_length=self.max_length-max_num_tokens)
-        continuation = rf.greedy_until(ctx, ["\n"], max_num_tokens)
+        continuation = rf.greedy_until(ctx, [self.SEP], max_num_tokens)
         return continuation
 
     def process_results(self, doc, results):
@@ -169,6 +175,9 @@ class XLSumJaWithJAAlpacaPrompt(XLSumJa):
         input_text = f"ニュース記事:{doc['text']}"
         return f"### 指示:\n{self.INSTRUCTION}\n\n### 入力:\n{input_text}\n\n### 応答:\n"
 
+    def preprocess_ctx(self, ctx, max_length):
+        return super().preprocess_ctx(ctx, max_length, ctx_prompt=f"### 指示:\n{self.INSTRUCTION}\n\n### 入力:\n", summary_prompt="### 応答:\n")
+
 
 class XLSumJaWithRinnaInstructionSFT(XLSumJa):
     """
@@ -185,7 +194,9 @@ class XLSumJaWithRinnaInstructionSFT(XLSumJa):
         return f"ユーザー: {input_text}{self.SEP}システム: "
     
     def preprocess_ctx(self, ctx, max_length):
-        return super().preprocess_ctx(ctx, max_length, ctx_prompt=f"{self.SEP}ユーザー: ", summary_prompt=f"{self.SEP}システム: ")
+        ctx = super().preprocess_ctx(ctx, max_length, ctx_prompt=f"ユーザー: ", summary_prompt=f"{self.SEP}システム: ")
+        ctx = ctx.replace("<NL><NL>", "<NL>")
+        return ctx
     
     
 VERSIONS = [
