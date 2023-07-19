@@ -47,8 +47,12 @@ class HFLM(BaseLM):
             low_cpu_mem_usage=low_cpu_mem_usage,
             revision=revision,
             trust_remote_code=trust_remote_code,
-        ).to(self.device)
-        self.gpt2.eval()
+        ).eval()
+        if not load_in_8bit:
+            try:
+                self.gpt2.to(self.device)
+            except:
+                print("Failed to place model onto specified device. This may be because the model is quantized via `bitsandbytes`. If the desired GPU is being used, this message is safe to ignore.")
         self.tokenizer = transformers.AutoTokenizer.from_pretrained(
             pretrained if tokenizer is None else tokenizer,
             revision=revision,
