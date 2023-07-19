@@ -85,6 +85,7 @@ class HuggingFaceAutoLM(BaseLM):
         peft: str = None,
         load_in_8bit: Optional[bool] = False,
         trust_remote_code: Optional[bool] = False,
+        use_fast: Optional[bool] = True
     ):
         """Initializes a HuggingFace `AutoModel` and `AutoTokenizer` for evaluation.
         Args:
@@ -138,6 +139,8 @@ class HuggingFaceAutoLM(BaseLM):
                 https://huggingface.co/docs/transformers/main/en/main_classes/model#transformers.PreTrainedModel.from_pretrained.load_in_8bit
             trust_remote_code (bool, optional, defaults to False):
                 If True, will trust the remote code when loading the model.
+            use_fast (bool, optional, defaults to True):
+                If True, will use the fast tokenizer when loading the model.
         """
         super().__init__()
 
@@ -172,6 +175,7 @@ class HuggingFaceAutoLM(BaseLM):
             revision=revision,
             subfolder=subfolder,
             tokenizer=tokenizer,
+            use_fast=use_fast,
         )
         self.tokenizer.model_max_length = self.max_length
 
@@ -274,11 +278,13 @@ class HuggingFaceAutoLM(BaseLM):
         revision: str,
         subfolder: str,
         tokenizer: Optional[str] = None,
+        use_fast: Optional[bool] = True,
     ) -> transformers.PreTrainedTokenizer:
         """Returns a pre-trained tokenizer from a pre-trained tokenizer configuration."""
         tokenizer = self.AUTO_TOKENIZER_CLASS.from_pretrained(
             pretrained if tokenizer is None else tokenizer,
             revision=revision + ("/" + subfolder if subfolder is not None else ""),
+            use_fast=use_fast,
         )
         tokenizer.pad_token = tokenizer.eos_token
         return tokenizer
@@ -427,12 +433,14 @@ class AutoCausalLM(HuggingFaceAutoLM):
         revision: str,
         subfolder: str,
         tokenizer: Optional[str] = None,
+        use_fast: Optional[bool] = True,
     ) -> transformers.PreTrainedTokenizer:
         tokenizer = super()._create_auto_tokenizer(
             pretrained=pretrained,
             revision=revision,
             subfolder=subfolder,
             tokenizer=tokenizer,
+            use_fast=use_fast,
         )
         tokenizer.padding_side = "left"
         return tokenizer

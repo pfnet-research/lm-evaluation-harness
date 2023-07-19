@@ -1,3 +1,4 @@
+import os
 import argparse
 import json
 import logging
@@ -32,7 +33,7 @@ def parse_args():
     parser.add_argument("--tasks", default=None, choices=MultiChoice(tasks.ALL_TASKS))
     parser.add_argument("--provide_description", action="store_true")
     parser.add_argument("--num_fewshot", type=str, default="0")
-    parser.add_argument("--batch_size", type=str, default=None)
+    parser.add_argument("--batch_size", type=int, default=None)
     parser.add_argument("--device", type=str, default=None)
     parser.add_argument("--output_path", default=None)
     parser.add_argument("--limit", type=str, default=None)
@@ -48,11 +49,11 @@ def parse_args():
 # Returns a list containing all values of the source_list that
 # match at least one of the patterns
 def pattern_match(patterns, source_list):
-    task_names = set()
+    task_names = []
     for pattern in patterns:
         for matching in fnmatch.filter(source_list, pattern):
-            task_names.add(matching)
-    return sorted(list(task_names))
+            task_names.append(matching)
+    return task_names
 
 
 def main():
@@ -106,6 +107,7 @@ def main():
     print(dumped)
 
     if args.output_path:
+        os.makedirs(os.path.dirname(args.output_path), exist_ok=True)
         with open(args.output_path, "w") as f:
             f.write(dumped)
 

@@ -1,0 +1,48 @@
+{
+  "results": {
+    "jcommonsenseqa-1.1-0.3": {
+      "acc": 0.5915996425379804,
+      "acc_stderr": 0.014700635398352882,
+      "acc_norm": 0.5022341376228776,
+      "acc_norm_stderr": 0.014953565834041985
+    },
+    "jnli-1.1-0.3": {
+      "acc": 0.5073952341824157,
+      "acc_stderr": 0.010135646189521218,
+      "acc_norm": 0.49219391947411667,
+      "acc_norm_stderr": 0.010135519558606705
+    },
+    "marc_ja-1.1-0.3": {
+      "acc": 0.814963376351587,
+      "acc_stderr": 0.0051286955943422845,
+      "acc_norm": 0.814963376351587,
+      "acc_norm_stderr": 0.0051286955943422845
+    },
+    "jsquad-1.1-0.3": {
+      "exact_match": 27.577667717244484,
+      "f1": 36.08710452441707
+    }
+  },
+  "versions": {
+    "jcommonsenseqa-1.1-0.3": 1.1,
+    "jnli-1.1-0.3": 1.1,
+    "jsquad-1.1-0.3": 1.1,
+    "marc_ja-1.1-0.3": 1.1
+  },
+  "config": {
+    "model": "hf-causal",
+    "model_args": "pretrained=sft/checkpoints/stablelm-jp-instruct-1b_1.3.2,tokenizer=tokenizers/nai-hf-tokenizer/,use_fast=False",
+    "num_fewshot": [
+      2,
+      3,
+      3,
+      3
+    ],
+    "batch_size": null,
+    "device": "cuda",
+    "no_cache": false,
+    "limit": null,
+    "bootstrap_iters": 100000,
+    "description_dict": {}
+  }
+}
